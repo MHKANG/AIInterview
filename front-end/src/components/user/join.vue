@@ -63,12 +63,19 @@
 </template>
 
 <script>
-var storage = window.localStorage;
+// var storage = window.localStorage;
+
+import constants from "../../constants";
 export default {
   data() {
     return {
       el: "성별",
       gender: ["남성", "여성"],
+      email: "",
+      password: "",
+      nickname: "",
+      username: "",
+      age: "",
     };
   },
   methods: {
@@ -103,11 +110,10 @@ export default {
         let tgender = this.gender;
         let tage = this.age;
 
-        this.$store.dispatch(Constants.SINGIN, {
+        this.$store.dispatch(constants.SINGIN, {
           temail,
           tpassword,
           tnickname,
-          tname,
           tusername,
           tgender,
           tage,
@@ -117,19 +123,9 @@ export default {
     },
     goToPages() {
       this.$router.push({
-        name: constans.URL_TYPE.POST.MAIN,
+        name: constants.URL_TYPE.POST.MAIN,
       });
     },
-  },
-  data: () => {
-    return {
-      email: "",
-      password: "",
-      nickname: "",
-      username: "",
-      gender: "",
-      age: "",
-    };
   },
 };
 </script>
