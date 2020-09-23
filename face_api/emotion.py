@@ -122,23 +122,23 @@ def cal_point_one(result_list):
         point_list.append(point)
     return point, point_list, emo_list
 
-def cal_point_two(result_list):
-    most_emo_list = list()
-    percentage_list = list()
-    emo_dict = defaultdict(int)
-    count = 0
-    while result_list:
-        count += 1
-        result = result_list.popleft()
-        temp_percentage_list = list()
-        for emotion, percentage in result:
-            emo_dict[emotion] += percentage
-            temp_percentage_list.append((emotion, emo_dict[emotion]/count))
-        temp_percentage_list.sort(key=lambda x : x[1], reverse=True)
-        most_emotion, most_percentage = temp_percentage_list[0]
-        most_emo_list.append(most_emotion)
-        percentage_list.append(temp_percentage_list)
-    return most_emo_list, percentage_list
+# def cal_point_two(result_list):
+#     most_emo_list = list()
+#     percentage_list = list()
+#     emo_dict = defaultdict(int)
+#     count = 0
+#     while result_list:
+#         count += 1
+#         result = result_list.popleft()
+#         temp_percentage_list = list()
+#         for emotion, percentage in result:
+#             emo_dict[emotion] += percentage
+#             temp_percentage_list.append((emotion, emo_dict[emotion]/count))
+#         temp_percentage_list.sort(key=lambda x : x[1], reverse=True)
+#         most_emotion, most_percentage = temp_percentage_list[0]
+#         most_emo_list.append(most_emotion)
+#         percentage_list.append(temp_percentage_list)
+#     return most_emo_list, percentage_list
 
 device = torch.device('cpu')
 net = VGG('VGG19')
@@ -160,14 +160,14 @@ while True:
     if folder_index:
         result = capture_emotion(folder_index, name)
         
-        # point, point_list, emo_list = cal_point_one(result)
-        # print(point)
-        # print(point_list)
-        # print(emo_list)
+        point, point_list, emo_list = cal_point_one(result)
+        print(point)
+        print(point_list)
+        print(emo_list)
 
-        most_emo_list, percentage_list = cal_point_two(result)
-        print(percentage_list)
-        print(most_emo_list)
+        # most_emo_list, percentage_list = cal_point_two(result)
+        # print(percentage_list)
+        # print(most_emo_list)
 
         # sns.set_theme(style="darkgrid")
         # sns.lineplot(x=range(1,len(point_list)+1), y=point_list)
