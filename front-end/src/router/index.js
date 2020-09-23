@@ -22,6 +22,11 @@ export const router =  new VueRouter({
             name: 'Test',
             component: () => import('@/components/contents/test')
         },
+        {
+            path: "/board",
+            name: 'Board',
+            component: () => import('@/components/contents/board')
+        },
 
     ],
 })

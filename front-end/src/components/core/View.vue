@@ -92,9 +92,11 @@
         <v-icon v-if="fab">mdi-close</v-icon>
         <v-icon v-else>mdi-plus</v-icon>
       </v-btn>
+      <router-link to="/board">
       <v-btn fab small>
         <v-icon>fas fa-book</v-icon>
       </v-btn>
+      </router-link>
       <v-btn fab small>
         <v-icon>mdi-account-circle</v-icon>
       </v-btn>

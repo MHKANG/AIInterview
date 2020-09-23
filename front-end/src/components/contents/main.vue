@@ -21,7 +21,6 @@
 export default {
   components: {
     CoreAppBar: () => import('@/components/core/AppBar'),
-    // CoreFooter: () => import('@/components/core/Footer'),
     CoreView: () => import('@/components/core/View'),
   },
 }

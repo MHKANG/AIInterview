@@ -252,7 +252,7 @@ export default {
           console.log(response);
           if (response.data.status) {
             this.$session.set("user", response.data.userinfo);
-            // console.log(this.$session.has("user"));
+            console.log(this.$session.has("user"));
             this.$router.push("/main");
           }
         })
