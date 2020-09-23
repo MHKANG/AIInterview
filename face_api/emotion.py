@@ -139,8 +139,8 @@ while True:
         print(point)
         print(point_list)
         print(emo_list)
-        sns.set_theme(style="darkgrid")
-        sns.lineplot(x=range(1,len(point_list)+1), y=point_list)
-        plt.xlabel='Time'
-        plt.ylabel='Point'
-        plt.show()
+        # sns.set_theme(style="darkgrid")
+        # sns.lineplot(x=range(1,len(point_list)+1), y=point_list)
+        # plt.xlabel='Time'
+        # plt.ylabel='Point'
+        # plt.show()
