@@ -3,47 +3,28 @@
     <v-content>
       <section id="title">
         <v-row no-gutters>
-
           <v-img
-              :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
-              src="../../assets/images/background.png"
+            :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
+            src="../../assets/images/background.png"
           >
             <v-theme-provider dark>
               <v-container fill-height>
-                <v-row
-                    align="center"
-                    class="white--text mx-auto"
-                    justify="center"
-                >
-                  <v-col
-                      class="white--text text-center"
-                      cols="12"
-                      tag="h1"
-                  >
-                  <span
+                <v-row align="center" class="white--text mx-auto" justify="center">
+                  <v-col class="white--text text-center" cols="12" tag="h1">
+                    <span
                       :class="[$vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2']"
                       class="font-weight-light"
-                  >
-                    WELCOME TO
-                  </span>
+                    >WELCOME TO</span>
 
-                    <br>
+                    <br />
 
                     <span
-                        :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']"
-                        class="font-weight-black"
-                    >
-                    Aight
-                  </span>
-
+                      :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']"
+                      class="font-weight-black"
+                    >Aight</span>
                   </v-col>
 
-                  <v-btn
-                      class="align-self-end"
-                      fab
-                      outlined
-                      @click="$vuetify.goTo('#login')"
-                  >
+                  <v-btn class="align-self-end" fab outlined @click="$vuetify.goTo('#login')">
                     <v-icon>mdi-chevron-double-down</v-icon>
                   </v-btn>
                 </v-row>
@@ -59,19 +40,13 @@
         <v-container class="text-center">
           <h2 class="display-2 font-weight-bold mb-3">WITH US</h2>
 
-          <v-responsive
-              class="mx-auto mb-8"
-              width="56"
-          >
+          <v-responsive class="mx-auto mb-8" width="56">
             <v-divider class="mb-1"></v-divider>
 
             <v-divider></v-divider>
           </v-responsive>
 
-          <v-responsive
-              class="mx-auto font-weight-light mb-8"
-              max-width="400"
-          >
+          <v-responsive class="mx-auto font-weight-light mb-8" max-width="400">
             <v-row style="padding: 0 10px 0 10px;">
               <v-col cols="8" style="padding-bottom: 0px;">
                 <v-text-field outlined dense label="ID"></v-text-field>
@@ -86,7 +61,7 @@
               <v-col cols="7" style="line-height: 40px; text-align: left;">
                 <span>비밀번호를 잊으셨나요?</span>
               </v-col>
-              <v-col cols="5" >
+              <v-col cols="5">
                 <v-btn text color="blue darken-3">비밀번호 찾기</v-btn>
               </v-col>
             </v-row>
@@ -95,116 +70,107 @@
               <v-col cols="7" style="line-height: 40px; text-align: left;">
                 <span>아직 회원이 아닌가요?</span>
               </v-col>
-              <v-col cols="5" >
-                <v-btn text color="blue darken-3">회원가입</v-btn>
+              <v-col cols="5">
+                <v-btn text color="blue darken-3" @click="goJoin">회원가입</v-btn>
               </v-col>
             </v-row>
           </v-responsive>
 
-          <v-avatar
-              size="128"
-          >
+          <v-avatar size="128">
             <v-img src="../../assets/images/ai.png"></v-img>
           </v-avatar>
-
         </v-container>
 
         <div class="py-12"></div>
       </section>
 
-      <section
-          id="features"
-          class="grey lighten-3"
-      >
+      <section id="features" class="grey lighten-3">
         <div class="py-12"></div>
 
         <v-container class="text-center">
           <h2 class="display-2 font-weight-bold mb-3">TEAM. Aight</h2>
 
-          <v-responsive
-              class="mx-auto mb-12"
-              width="56"
-          >
+          <v-responsive class="mx-auto mb-12" width="56">
             <v-divider class="mb-1"></v-divider>
 
             <v-divider></v-divider>
           </v-responsive>
 
           <v-row>
-            <v-col
-                v-for="({ profile, title, text }, i) in features"
-                :key="i"
-                cols="12/5"
-            >
-              <figure class="snip1384"><img :src="profile"/>
+            <v-col v-for="({ profile, title, text }, i) in features" :key="i" cols="12/5">
+              <figure class="snip1384">
+                <img :src="profile" />
                 <figcaption>
                   <h3>{{title}}</h3>
                   <p>{{text}}</p>
                 </figcaption>
               </figure>
-
             </v-col>
           </v-row>
         </v-container>
-
-
 
         <div class="py-12"></div>
       </section>
     </v-content>
 
-    <v-footer
-        class="justify-center"
-        color="#292929"
-        height="100"
-    >
-      <div class="title font-weight-light grey--text text--lighten-1 text-center">
-        &copy; {{ (new Date()).getFullYear() }} — AI Interview — Made with 💜 by Team.Aight
-      </div>
+    <v-footer class="justify-center" color="#292929" height="100">
+      <div
+        class="title font-weight-light grey--text text--lighten-1 text-center"
+      >&copy; {{ (new Date()).getFullYear() }} — AI Interview — Made with 💜 by Team.Aight</div>
     </v-footer>
   </div>
 </template>
 
 <script>
 export default {
+  methods: {
+    goJoin() {
+      this.$router.push("/join");
+    },
+  },
   data: () => {
     return {
       features: [
         {
-          profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
-          title: '팀장 이원오',
-          text: 'Back-end & SQL',
+          profile:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg",
+          title: "팀장 이원오",
+          text: "Back-end & SQL",
         },
         {
-          profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
-          title: '팀원 강명훈',
-          text: 'Back-End',
+          profile:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg",
+          title: "팀원 강명훈",
+          text: "Back-End",
         },
         {
-          profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
-          title: '팀원 고민주',
-          text: 'Front-end',
+          profile:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg",
+          title: "팀원 고민주",
+          text: "Front-end",
         },
         {
-          profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
-          title: '팀원 박춘화',
-          text: 'Front-end & Python',
+          profile:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg",
+          title: "팀원 박춘화",
+          text: "Front-end & Python",
         },
         {
-          profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
-          title: '팀원 정희훈',
-          text: 'Back-end',
+          profile:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg",
+          title: "팀원 정희훈",
+          text: "Back-end",
         },
       ],
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
 <style>
 @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
 figure.snip1384 {
-  font-family: 'Raleway', Arial, sans-serif;
+  font-family: "Raleway", Arial, sans-serif;
   position: relative;
   overflow: hidden;
   margin: 10px;
@@ -236,7 +202,7 @@ figure.snip1384 figcaption {
   right: 0;
 }
 figure.snip1384:after {
-  content: '';
+  content: "";
   background-color: rgba(0, 0, 0, 0.65);
   -webkit-transition: all 0.35s ease;
   transition: all 0.35s ease;
@@ -312,5 +278,4 @@ figure.snip1384.hover i {
   transform: translate(0px, 0px);
   opacity: 1;
 }
-
 </style>
