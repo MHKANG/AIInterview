@@ -111,7 +111,7 @@
                 <span>아직 회원이 아닌가요?</span>
               </v-col>
               <v-col cols="5" >
-                <v-btn text color="blue darken-3">회원가입</v-btn>
+                <v-btn text color="blue darken-3" @click="goJoin()">회원가입</v-btn>
               </v-col>
             </v-row>
           </v-responsive>
