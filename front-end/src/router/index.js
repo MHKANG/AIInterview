@@ -28,6 +28,16 @@ export const router =  new VueRouter({
           component: () => import("@/components/user/join"),
         },
         
+        {
+            path: "/test",
+            name: 'Test',
+            component: () => import('@/components/contents/test')
+        },
+        {
+            path: "/board",
+            name: 'Board',
+            component: () => import('@/components/contents/board')
+        },
 
     ],
 })
