@@ -46,7 +46,7 @@
             :search="search"
             :items="notices"
         >
-          <template item.title="{ item }">
+          <template #item.title="{ item }">
             <a target="_blank" :href="item.title">
               {{ item.title }}
             </a>
