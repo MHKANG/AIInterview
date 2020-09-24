@@ -33,7 +33,7 @@
               <base-text>
                 AI 또는 화상면접을 연습해보고 싶나요?
               </base-text>
-              <base-btn class="mt-4">
+              <base-btn class="mt-4" @click="goInterview">
                 Let's Interview!
               </base-btn>
             </v-col>
@@ -120,6 +120,9 @@
       goHome(){
         this.$router.push('/');
       },
+      goInterview(){
+        this.$router.push('/interview');
+      }
     },
 
   }
