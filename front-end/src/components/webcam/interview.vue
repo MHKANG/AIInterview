@@ -3,6 +3,7 @@
         <v-img src="../../assets/images/background.png">
             <v-content>
                 <section id = "interview">
+
                     <div class ="text-center">
                         <p>InterView Page</p>
                         <video id="inputVideo" :width=width :height=height poster="../../assets/images/webcam_test.jpg"></video>
@@ -17,12 +18,15 @@
             class="justify-center"
             color="#292929"
             height="100"
+            fixed
             >
             <div class="title font-weight-light grey--text text--lighten-1 text-center">
                 &copy; {{ (new Date()).getFullYear() }} — AI Interview — Made with 💜 by Team.Aight
             </div>
             </v-footer>
         </v-img>
+   
+        
     </div>
 
     
@@ -42,7 +46,7 @@ export default {
             message: [],
             socket: null,
             src : null,
-            // dst : null,
+            dst : null,
             videodata : null,
             cap : null,
             actionBtn: null,
@@ -64,8 +68,8 @@ export default {
             console.log(this.message);
         })
         // console.log("End")
-        this.width = 500
-        this.height = 400
+        this.width = 320
+        this.height = 240
         // console.log(this.message)
     },
     mounted(){
@@ -100,7 +104,7 @@ export default {
                 this.videodata.play();
                 this.streaming = true;
                 this.src = new cv.Mat(this.height, this.width, cv.CV_8UC4);
-                // this.dst = new cv.Mat(this.height, this.width, cv.CV_8UC1);
+                this.dst = new cv.Mat(this.height, this.width, cv.CV_8UC1);
                 setTimeout(this.processVideo, 0)
             })
             .catch(err => console.log(`An error occurred: ${err}`));
@@ -118,19 +122,20 @@ export default {
         processVideo(){
             if (!this.streaming) {
             this.src.delete();
-            // this.dst.delete();
+            this.dst.delete();
             return;
             }
             const begin = Date.now();
             this.cap.read(this.src);
             // console.log(this.src);
-            // cv.cvtColor(this.src, this.dst, cv.COLOR_RGBA2GRAY);
+            cv.cvtColor(this.src, this.dst, cv.COLOR_RGBA2GRAY);
             
-            // console.log(this.dst);
-            this.socket.emit('cvdata', {'data': this.src.data});
+            console.log(this.dst.data);
+            // console.log(typeof(this.dst.data));
+            this.socket.emit('cvdata', {'data' : this.dst.data});
             // console.log(this.cap);
             const delay = 1000/this.FPS - (Date.now() - begin);
-            setTimeout(this.processVideo, delay);
+            setTimeout(this.processVideo, delay+10000);
         }
     }
 }
