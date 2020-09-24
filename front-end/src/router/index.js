@@ -22,6 +22,12 @@ export const router =  new VueRouter({
             name: 'interview',
             component: () => import('@/components/webcam/interview')
         },
+        {
+          path: "/join",
+          name: "Join",
+          component: () => import("@/components/user/join"),
+        },
+        
 
     ],
 })
