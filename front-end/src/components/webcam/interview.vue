@@ -181,8 +181,7 @@ export default {
             cv.cvtColor(this.src, this.dst, cv.COLOR_RGBA2GRAY);
             
             console.log(this.dst.data);
-            // console.log(typeof(this.dst.data));
-            this.socket.emit('cvdata', {'data' : this.dst.data});
+            this.socket.emit('cvdata', {'data' : this.src.data});
             // console.log(this.cap);
             const delay = 1000/this.FPS - (Date.now() - begin);
             setTimeout(this.processVideo, delay+10000);
