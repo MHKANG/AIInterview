@@ -1,5 +1,0 @@
-seaborn
-matplotlib
-pytorch
-h5py
-sklearn
