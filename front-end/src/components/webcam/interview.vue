@@ -184,7 +184,7 @@ export default {
             this.socket.emit('cvdata', {'data' : this.src.data});
             // console.log(this.cap);
             const delay = 1000/this.FPS - (Date.now() - begin);
-            setTimeout(this.processVideo, delay+10000);
+            setTimeout(this.processVideo, delay+1000);
         },
         logout(){
             this.$session.destroy();
