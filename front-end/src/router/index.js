@@ -38,6 +38,11 @@ export const router =  new VueRouter({
             name: 'Board',
             component: () => import('@/components/contents/board')
         },
+        {
+            path: "/uploadVideo",
+            name: 'uploadVideo',
+            component: () => import('@/components/contents/uploadVideo')
+        },
 
     ],
 })
