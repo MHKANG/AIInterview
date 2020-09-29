@@ -110,7 +110,7 @@ export default {
     created(){
         // console.log("Created Start")
         // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
-        this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
         // console.log(this.socket)
         this.socket.on('MESSAGE', (socket) =>{
             // console.log(socket);
@@ -169,19 +169,28 @@ export default {
             }
             this.streaming = false;
         },
-        processVideo(){
+        async processVideo(){
+            let uploadToServer = function(socket, data) {
+                socket.emit('cvdata', {'data' : data});
+            };
+
             if (!this.streaming) {
             this.src.delete();
             this.dst.delete();
             return;
             }
+
             const begin = Date.now();
             this.cap.read(this.src);
             // console.log(this.src);
             cv.cvtColor(this.src, this.dst, cv.COLOR_RGBA2GRAY);
             
-            console.log(this.dst.data);
-            this.socket.emit('cvdata', {'data' : this.src.data});
+            await uploadToServer(this.socket, this.src.data);
+
+            this.socket.on('res', function(data) {
+                console.log(data);
+            });
+
             // console.log(this.cap);
             const delay = 1000/this.FPS - (Date.now() - begin);
             setTimeout(this.processVideo, delay+1000);

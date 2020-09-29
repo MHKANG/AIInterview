@@ -35,8 +35,7 @@
                             crossorigin
                             playsinline
                             poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"
-                            src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
-                            
+                            :src="videosrc"
                         >
                             
                             <track
@@ -70,7 +69,7 @@
                         <label>
                             영상 파일을 올려 주세요.
                             <br>
-                        <input type="file" id="file_input" @change="handleUpload($event)"/>
+                        <input type="file" id="file_input" @change="handleUpload($event)" accept="video/*"/>
                         </label>
                         </v-row>
                         
@@ -122,7 +121,6 @@
 import VuePlyr from 'vue-plyr'
 import io from 'socket.io-client'
 
-
 export default {
     name : 'uploadVideo',
     components:{
@@ -136,17 +134,23 @@ export default {
             upload_file:[],
             videosrc: null,
             videotype:null,
-            // uid: this.$session.get("user").uid,
-            uid : 'test'
+            uid: "",
         }
     },
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
+        this.fab = false;
+        // this.uid = this.$session.get("user").uid;
+        this.uid = "kang";
 
     },
     mounted(){
         
+    },
+
+    updated() {
+        this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
     },
     methods:{
         logout(){
@@ -162,9 +166,27 @@ export default {
             this.videotype = this.upload_file.type;
             console.log(this.upload_file)
         },
-        uploadFile(){
-            this.upload = {'uid' :this.uid,'file' : this.upload_file }
-            this.socket.emit('uploadFile', {'data' : this.upload})
+        async uploadFile(){
+            let uploadToServer = function(socket, data) {
+                socket.emit('uploadFile', {'data' : data})
+            };
+            this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type };
+            let fileName = 'kang';
+            let fileType = this.upload_file.type.split('/')[1];
+            await uploadToServer(this.socket, this.upload);
+            this.socket.on('success', function(data) {
+                this.videoSrc = `../../../../face_api/videos/${fileName}/${fileName}1.${fileType}`;
+                console.log(this.videoSrc);
+                console.log(data);
+                // let path = JSON.parse(data['data'])['path'];
+                // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
+                // console.log(this.videosrc);
+            });
+            this.socket.on('res', function(data) {
+                console.log(data);
+            });
+            this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
+            console.log(this.videosrc);
         }
     }
 }

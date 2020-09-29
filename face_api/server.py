@@ -12,7 +12,6 @@ import os
 from collections import deque, defaultdict
 from torch.autograd import Variable
 import seaborn as sns
-import requests
 import json
 
 import transforms as transforms
@@ -126,8 +125,10 @@ def video_analysis(username, video_type):
         result = capture_emotion(folder_index, username)
         
         point, point_list, emo_list = cal_point(result)
-        result_data = {}
-        return requests.post('http://localhost:8080/api/interviewresult', data = json.dumps(result_data))
+        result_data = {
+            'point_list' : point_list
+        }
+        emit("res", {'data' : json.dumps(result_data)})
         # print(point)
         # print(point_list)
         # print(emo_list)
@@ -182,9 +183,8 @@ def cvdata(data):
     for i in range(len(class_names)):
         emotion_list.append((class_names[i], score.data.cpu().numpy()[i]))
     emotion_list.sort(key=lambda x:x[1], reverse=True)
-    print(emotion_list)
-    print("cv")
-    return requests.post()
+    result_data = {'emotion' : {key:str(val) for (key,val) in emotion_list}, 'path' : ''}
+    emit("res", {'data' : json.dumps(result_data)})
 
 @socketio.on('my event')
 def handle_my_custum_event(json, methods=['GET', 'POST']):
@@ -199,7 +199,9 @@ def uploadFile(data):
     video_count = len(os.listdir('./videos/{0}'.format(username)))+1
     with open('./videos/{0}/{1}{2}.{3}'.format(username, username, video_count, video_type), 'wb') as f:
         f.write(video_file);
-
+    user_path = os.path.abspath('./videos/{0}'.format(username))
+    emit("success", {'data' : json.dumps('')})
+    # emit("success", {'data' : json.dumps({'path':user_path})})
     video_analysis(username, video_type)
 
 cut_size = 44
