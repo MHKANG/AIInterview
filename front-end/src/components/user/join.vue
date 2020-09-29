@@ -6,7 +6,18 @@
         <tr>
           <td class="td">이메일</td>
           <td class="td">
-            <input v-model="email" id="email" placeholder="이메일을 입력해주세요" type="text" class="input" />
+            <input
+              v-model="email"
+              id="email"
+              placeholder="이메일을 입력해주세요"
+              type="text"
+              class="input"
+            />
+          </td>
+          <td class="td">
+            <v-btn text color="blue darken-3" @click="emailCheck"
+              >중복확인</v-btn
+            >
           </td>
         </tr>
         <tr>
@@ -16,7 +27,7 @@
               v-model="password"
               id="name"
               placeholder="비밀번호를 입력해주세요"
-              type="text"
+              type="password"
               class="input"
             />
           </td>
@@ -54,10 +65,20 @@
         <tr>
           <td class="td">나이</td>
           <td class="td">
-            <input v-model="age" id="age" placeholder="나이를 입력해주세요" type="number" class="input" />
+            <input
+              v-model="age"
+              id="age"
+              placeholder="나이를 입력해주세요"
+              type="number"
+              class="input"
+            />
           </td>
         </tr>
       </table>
+
+      <v-col cols="5">
+        <v-btn text color="blue darken-3" @click="signIn">작성완료</v-btn>
+      </v-col>
     </div>
   </div>
 </template>
@@ -65,7 +86,8 @@
 <script>
 // var storage = window.localStorage;
 
-import constants from "../../constants";
+import Constants from "../../Constants";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -103,27 +125,65 @@ export default {
       if (this.age == "") {
         alert("나이를 입력해주세요");
       } else {
-        let temail = this.email;
-        let tpassword = this.password;
-        let tnickname = this.nickname;
-        let tusername = this.username;
-        let tgender = this.gender;
-        let tage = this.age;
-
-        this.$store.dispatch(constants.SINGIN, {
-          temail,
-          tpassword,
-          tnickname,
-          tusername,
-          tgender,
-          tage,
-        });
-        this.goToPages;
+        axios({
+          method: "post",
+          url: "http://localhost:8081/api/user",
+          data: {
+            uid: this.email,
+            password: this.password,
+            nickname: this.nickname,
+            username: this.username,
+            is_admin: false,
+            is_activated: true,
+            auth_date: null,
+            gender: this.el,
+            age: this.age,
+          },
+        })
+          .then((data) => {
+            console.dir(data);
+            let msg = "회원 가입 중 문제가 발생";
+            if (data.data == "success") {
+              msg = "회원 가입 완료";
+            }
+            alert(msg);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
+      this.$router.push("/");
+    },
+
+    emailCheck() {
+      var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+      axios({
+        method: "GET",
+        url: "http://localhost:8081/api/user/emailCheck?email=" + this.email,
+      })
+        .then((data) => {
+          let msg = "이미 가입된 이메일 입니다.";
+          console.log(data);
+          if (this.email == "") {
+            alert("이메일을 입력해 주세요.");
+            return;
+          }
+          if (this.email.match(regExp) == null) {
+            alert("이메일 형식이 맞지 않습니다.");
+            return;
+          }
+          if (data.data == false) {
+            msg = "사용 가능한 이메일 입니다.";
+          }
+          alert(msg);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     goToPages() {
       this.$router.push({
-        name: constants.URL_TYPE.POST.MAIN,
+        name: Constants.URL_TYPE.POST.MAIN,
       });
     },
   },

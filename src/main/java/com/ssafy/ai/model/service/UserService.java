@@ -15,6 +15,8 @@ public interface UserService {
 	public int delete(int user_pk);
 
 	public int update(User u);
-	
+
 	public User selectByUid(String uid);
+
+	public String checkEmail(String uid);
 }
