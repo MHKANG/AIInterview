@@ -136,12 +136,13 @@ export default {
             upload_file:[],
             videosrc: null,
             videotype:null,
-            uid: this.$session.get("user").uid,
+            // uid: this.$session.get("user").uid,
+            uid : 'test'
         }
     },
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
-        this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
 
     },
     mounted(){
