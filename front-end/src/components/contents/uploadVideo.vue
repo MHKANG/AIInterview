@@ -70,7 +70,7 @@
                         <label>
                             영상 파일을 올려 주세요.
                             <br>
-                        <input type="file" id="file_input" @change="handleUpload($event)"/>
+                        <input type="file" id="file_input" @change="handleUpload($event)" accept="video/*"/>
                         </label>
                         </v-row>
                         
@@ -136,12 +136,15 @@ export default {
             upload_file:[],
             videosrc: null,
             videotype:null,
-            uid: this.$session.get("user").uid,
+            uid: "",
         }
     },
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+        this.fab = false;
+        // this.uid = this.$session.get("user").uid;
+        this.uid = "kang";
 
     },
     mounted(){
@@ -162,7 +165,7 @@ export default {
             console.log(this.upload_file)
         },
         uploadFile(){
-            this.upload = {'uid' :this.uid,'file' : this.upload_file }
+            this.upload = {'uid' :this.uid, 'file' : this.upload_file}
             this.socket.emit('uploadFile', {'data' : this.upload})
         }
     }

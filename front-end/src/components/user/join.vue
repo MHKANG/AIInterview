@@ -86,7 +86,7 @@
 <script>
 // var storage = window.localStorage;
 
-import Constants from "../../Constants";
+// import Constants from "../../Constants";
 import axios from "axios";
 export default {
   data() {
@@ -182,9 +182,7 @@ export default {
         });
     },
     goToPages() {
-      this.$router.push({
-        name: Constants.URL_TYPE.POST.MAIN,
-      });
+      this.$router.push("/");
     },
   },
 };
