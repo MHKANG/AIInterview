@@ -1,5 +1,5 @@
 <template>
-    <div id ="videoapp">
+    <div class ="videoapp">
         <v-app-bar
         color="white"
         fixed
@@ -29,7 +29,7 @@
         <v-container>
             <v-row>
                 <v-col>
-                    <div id="videoPlay">
+                    <div id="videoPlay" class = "text-center">
                     <vue-plyr>
                         <video
                             crossorigin
@@ -66,13 +66,17 @@
                 
                 <v-col>
                     <div>
+                        <v-row>
                         <label>
                             영상 파일을 올려 주세요.
+                            <br>
                         <input type="file" id="file_input" @change="handleUpload($event)"/>
                         </label>
-                        <br>
-                        <br>
+                        </v-row>
+                        
+                        <v-row class = "text-center">
                         <v-btn id ="upload_btn" @click="uploadFile">UploadFile</v-btn>
+                        </v-row>
                     </div>
                 </v-col>
             </v-row>
@@ -116,7 +120,6 @@
 <script>
 
 import VuePlyr from 'vue-plyr'
-import siofu from 'socketio-file-upload'
 import io from 'socket.io-client'
 
 
@@ -133,12 +136,12 @@ export default {
             upload_file:[],
             videosrc: null,
             videotype:null,
+            uid: this.$session.get("user").uid,
         }
     },
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
-        this.upload = new siofu(this.socket,{chunkSize: 1024 * 1000 });
 
     },
     mounted(){
@@ -159,24 +162,28 @@ export default {
             console.log(this.upload_file)
         },
         uploadFile(){
-            this.socket.emit('uploadFile', {'data' : this.upload_file})
+            this.upload = {'uid' :this.uid,'file' : this.upload_file }
+            this.socket.emit('uploadFile', {'data' : this.upload})
         }
     }
 }
 </script>
 
 <style>
-    #videoapp {
+    .videoapp {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 110px;
+        margin-top: 80px;
+        background-image: url("../../assets/images/background.png");
+        background-size: cover;
     }
     #videoPlay {
-        width: 500px;
-        height: 400px;
+        width: 100%;
+        height: 100%;
+        
     }
     a{ color: black; }
     a:link { text-decoration: none; }
