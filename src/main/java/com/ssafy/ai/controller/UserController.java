@@ -2,9 +2,6 @@ package com.ssafy.ai.controller;
 
 import java.util.List;
 
-
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.ai.model.dto.User;
@@ -46,6 +44,18 @@ public class UserController {
 		return new ResponseEntity<List<User>>(all, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "User의 이메일을 반환한다.", response = List.class)
+	@GetMapping("/emailCheck")
+	public ResponseEntity<Boolean> checkEmail(@RequestParam String email) throws Exception {
+		logger.debug("User / checkEmail - 호출");
+		boolean is_existed = false;
+		String result = uService.checkEmail(email);
+		if (result != null) {
+			is_existed = true;
+		}
+		return new ResponseEntity<Boolean>(is_existed, HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "특정 User의 정보를 반환한다.", response = User.class)
 	@GetMapping("/select/{user_pk}")
 	public ResponseEntity<User> select(@PathVariable int user_pk) throws Exception {
@@ -53,22 +63,20 @@ public class UserController {
 
 		return new ResponseEntity<User>(uService.select(user_pk), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "login 한다", response = String.class)
 	@GetMapping("/login")
 	public ResponseEntity<String> login(@RequestBody User u) throws Exception {
 		logger.debug("User / login - 호출");
 		String userid = u.getUid();
 		String password = u.getPassword();
-		
+
 		User tmp = uService.selectByUid(userid);
-		if(userid.equals(tmp.getUid()) && password.equals(tmp.getPassword())) {
+		if (userid.equals(tmp.getUid()) && password.equals(tmp.getPassword())) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
-		
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
-
 
 	@ApiOperation(value = "User의 정보를 삽입한다.", response = String.class)
 	@PostMapping

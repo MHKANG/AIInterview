@@ -2,9 +2,6 @@ package com.ssafy.ai.model.service;
 
 import java.util.List;
 
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +9,11 @@ import com.ssafy.ai.model.dao.UserDao;
 import com.ssafy.ai.model.dto.User;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDao uDao;
-	
+
 	@Override
 	public List<User> selectAll() {
 		return uDao.selectAll();
@@ -45,6 +42,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User selectByUid(String uid) {
 		return uDao.selectByUid(uid);
+	}
+
+	@Override
+	public String checkEmail(String uid) {
+		return uDao.checkEmail(uid);
 	}
 
 }
