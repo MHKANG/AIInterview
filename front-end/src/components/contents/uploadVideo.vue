@@ -165,7 +165,7 @@ export default {
             console.log(this.upload_file)
         },
         uploadFile(){
-            this.upload = {'uid' :this.uid, 'file' : this.upload_file}
+            this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type }
             this.socket.emit('uploadFile', {'data' : this.upload})
         }
     }
