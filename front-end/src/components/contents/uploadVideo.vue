@@ -45,6 +45,7 @@
                 </v-col>
                 
                 <v-col>
+<<<<<<< HEAD
                     <v-row class ="d-flex align-center">
                         <v-col>
                         <br>
@@ -60,6 +61,16 @@
                       
                         <v-btn id ="upload_btn" @click="uploadFile">Upload</v-btn>
                         </v-col>
+=======
+                    <div>
+                        <v-row>
+                        <label>
+                            영상 파일을 올려 주세요.
+                            <br>
+                        <input type="file" id="file_input" @change="handleUpload($event)" accept="video/*"/>
+                        </label>
+                        </v-row>
+>>>>>>> ea08159f735d03bafc123e9898aae16097eaa722
                         
                     </v-row>
                 </v-col>
@@ -126,8 +137,15 @@ export default {
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+<<<<<<< HEAD
         // this.uid = this.$session.get("user").uid;
         this.uid = "kang";
+=======
+        this.fab = false;
+        // this.uid = this.$session.get("user").uid;
+        this.uid = "kang";
+
+>>>>>>> ea08159f735d03bafc123e9898aae16097eaa722
     },
     mounted(){
         
