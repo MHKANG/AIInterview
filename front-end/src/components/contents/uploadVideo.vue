@@ -26,61 +26,45 @@
             </v-btn>
         </v-app-bar>
 
-        <v-container>
+        <v-main>
             <v-row>
-                <v-col>
+                <v-col class ="d-flex align-center">
                     <div id="videoPlay" class = "text-center">
                     <vue-plyr>
                         <video
                             crossorigin
                             playsinline
                             poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"
-                            src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
+                            v-bind:src="videosrc"
                             
                         >
                             
-                            <track
-                            default
-                            kind="captions"
-                            label="English"
-                            src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-                            srclang="en"
-                            >
-                            <track
-                            kind="captions"
-                            label="Français"
-                            src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt"
-                            srclang="fr"
-                            >
-                            <a
-                            download=""
-                            href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
-                            >
-                            Download
-                            </a>
-
                         </video>
                     </vue-plyr>
                     </div>
                 </v-col>
                 
                 <v-col>
-                    <div>
-                        <v-row>
-                        <label>
-                            영상 파일을 올려 주세요.
-                            <br>
-                        <input type="file" id="file_input" @change="handleUpload($event)"/>
-                        </label>
-                        </v-row>
+                    <v-row class ="d-flex align-center">
+                        <v-col>
+                        <br>
+                        <v-file-input 
+                        id="file_input"
+                        @change="handleUpload($event)" 
+                        accept="video/*"
+                        dense
+                        outlined
+                        prepend-icon="mdi-file-video"
+                        placeholder="영상을 올려주세요."
+                        />
+                      
+                        <v-btn id ="upload_btn" @click="uploadFile">Upload</v-btn>
+                        </v-col>
                         
-                        <v-row class = "text-center">
-                        <v-btn id ="upload_btn" @click="uploadFile">UploadFile</v-btn>
-                        </v-row>
-                    </div>
+                    </v-row>
                 </v-col>
             </v-row>
-        </v-container>
+        </v-main>
 
         <v-speed-dial fixed bottom right open-on-hover v-model="fab" style="margin-bottom: 100px;">
             <v-btn
@@ -136,13 +120,14 @@ export default {
             upload_file:[],
             videosrc: null,
             videotype:null,
-            uid: this.$session.get("user").uid,
+            uid: "",
         }
     },
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
-
+        // this.uid = this.$session.get("user").uid;
+        this.uid = "kang";
     },
     mounted(){
         
@@ -156,14 +141,26 @@ export default {
         this.$router.push('/');
         },
         handleUpload(event){
-            this.upload_file = event.target.files[0];
-            this.videosrc = this.upload_file.name;
-            this.videotype = this.upload_file.type;
-            console.log(this.upload_file)
+            // this.upload_file = event.target.files[0];
+            // this.videosrc = this.upload_file.name;
+            // this.videotype = this.upload_file.type;
+            // console.log(event)
+            // var filePath = event.value;
+            // console.log(event)
+            this.upload_file = event;
+            // console.log(this.upload_file)
+            this.videosrc= event.name;
+            
+            console.log(document.getElementById("file_input").files[0])
         },
         uploadFile(){
             this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type }
             this.socket.emit('uploadFile', {'data' : this.upload})
+        },
+        checkFile(){
+            this.socket.on('getVideo', (video)=>{
+                this.videosrc = video.src;
+            })
         }
     }
 }
@@ -176,9 +173,8 @@ export default {
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 80px;
+        margin-top: 60px;
         background-image: url("../../assets/images/background.png");
-        background-size: cover;
     }
     #videoPlay {
         width: 100%;
@@ -195,5 +191,9 @@ export default {
         background-image: url("../../assets/images/bbback.jpg");
         background-size: cover;
         height: 100%;
+    }
+    #file_input{
+
+        width: 50%;
     }
 </style>
