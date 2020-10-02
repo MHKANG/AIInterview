@@ -35,8 +35,7 @@
                             crossorigin
                             playsinline
                             poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"
-                            v-bind:src="videosrc"
-                            
+                            :src="videosrc"
                         >
                             
                         </video>
@@ -45,7 +44,7 @@
                 </v-col>
                 
                 <v-col>
-<<<<<<< HEAD
+
                     <v-row class ="d-flex align-center">
                         <v-col>
                         <br>
@@ -60,18 +59,7 @@
                         />
                       
                         <v-btn id ="upload_btn" @click="uploadFile">Upload</v-btn>
-                        </v-col>
-=======
-                    <div>
-                        <v-row>
-                        <label>
-                            영상 파일을 올려 주세요.
-                            <br>
-                        <input type="file" id="file_input" @change="handleUpload($event)" accept="video/*"/>
-                        </label>
-                        </v-row>
->>>>>>> ea08159f735d03bafc123e9898aae16097eaa722
-                        
+                    
                     </v-row>
                 </v-col>
             </v-row>
@@ -117,7 +105,6 @@
 import VuePlyr from 'vue-plyr'
 import io from 'socket.io-client'
 
-
 export default {
     name : 'uploadVideo',
     components:{
@@ -136,19 +123,20 @@ export default {
     },
     created() {
       // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
-        this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
-<<<<<<< HEAD
-        // this.uid = this.$session.get("user").uid;
-        this.uid = "kang";
-=======
-        this.fab = false;
-        // this.uid = this.$session.get("user").uid;
-        this.uid = "kang";
 
->>>>>>> ea08159f735d03bafc123e9898aae16097eaa722
+        this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+
+        // this.uid = this.$session.get("user").uid;
+        this.uid = "kang";
+        this.fab = false;
+       
     },
     mounted(){
         
+    },
+
+    updated() {
+        this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
     },
     methods:{
         logout(){
@@ -171,14 +159,28 @@ export default {
             
             console.log(document.getElementById("file_input").files[0])
         },
-        uploadFile(){
-            this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type }
-            this.socket.emit('uploadFile', {'data' : this.upload})
-        },
-        checkFile(){
-            this.socket.on('getVideo', (video)=>{
-                this.videosrc = video.src;
-            })
+        async uploadFile(){
+            let uploadToServer = function(socket, data) {
+                socket.emit('uploadFile', {'data' : data})
+            };
+            this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type };
+            let fileName = 'kang';
+            let fileType = this.upload_file.type.split('/')[1];
+            await uploadToServer(this.socket, this.upload);
+            this.socket.on('success', function(data) {
+                this.videoSrc = `../../../../face_api/videos/${fileName}/${fileName}1.${fileType}`;
+                console.log(this.videoSrc);
+                console.log(data);
+                // let path = JSON.parse(data['data'])['path'];
+                // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
+                // console.log(this.videosrc);
+            });
+            this.socket.on('res', function(data) {
+                console.log(data);
+            });
+            this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
+            console.log(this.videosrc);
+
         }
     }
 }
