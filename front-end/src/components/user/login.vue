@@ -197,7 +197,7 @@ export default {
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
           title: '팀원 강명훈',
-          text: 'Back-End',
+          text: 'Front-End',
         },
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
@@ -207,7 +207,7 @@ export default {
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
           title: '팀원 박춘화',
-          text: 'Front-end & Python',
+          text: 'Back-end & Python',
         },
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
