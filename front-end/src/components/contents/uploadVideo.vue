@@ -1,34 +1,57 @@
 <template>
-    <div class ="videoapp">
+    <div id ="videoapp">
         <v-app-bar
         color="white"
         fixed
         >   
-            <v-slide-x-transition>
+            <v-layout row>
+                <v-flex xs6 md1 lg1>
                 <v-img
-                    src="@/assets/images/Temp_Logo2.jpg"
+                    src="@/assets/images/ProjectLogo.png"
                     class="shrink"
                     contain
                     height="50"
-                    style="left"
                 />
-            </v-slide-x-transition>
-            <v-spacer />
-            <v-btn
-                dense
-                dark
-                color="secondary"
-                small
-                style="margin-left:5px;"
-                @click="logout"
-            >
-                로그아웃
-            </v-btn>
+                </v-flex>
+                <v-flex  md7 lg9>
+                </v-flex>
+                <v-flex xs3 md2 lg1>
+                    <v-btn
+                    dense
+                    dark
+                    color="secondary"
+                    small
+                    style="margin-left:5%; margin-top:6%;"
+                    @click="logout"
+                    >
+                    마이페이지
+                    </v-btn>
+                </v-flex>
+                <v-flex xs3 md2 lg1>
+                    <v-btn
+                        dense
+                        dark
+                        color="secondary"
+                        small
+                        style="margin-left:5%; margin-top:6%;"
+                        @click="logout"
+                    >
+                        로그아웃
+                    </v-btn>
+                </v-flex>
+            
+            </v-layout>
+            
         </v-app-bar>
 
-        <v-main>
-            <v-row>
-                <v-col class ="d-flex align-center">
+        <v-container 
+            fluid 
+            id="mainContainer"
+            fill-height
+            
+        >
+            <v-layout row no-gutters>
+                <v-flex md12 lg7>
                     <div id="videoPlay" class = "text-center">
                     <vue-plyr>
                         <video
@@ -41,29 +64,53 @@
                         </video>
                     </vue-plyr>
                     </div>
-                </v-col>
+                </v-flex>
                 
-                <v-col>
-
-                    <v-row class ="d-flex align-center">
-                        <v-col>
-                        <br>
-                        <v-file-input 
-                        id="file_input"
-                        @change="handleUpload($event)" 
-                        accept="video/*"
-                        dense
-                        outlined
-                        prepend-icon="mdi-file-video"
-                        placeholder="영상을 올려주세요."
-                        />
-                      
-                        <v-btn id ="upload_btn" @click="uploadFile">Upload</v-btn>
-                    
-                    </v-row>
-                </v-col>
-            </v-row>
-        </v-main>
+                <v-flex sm8 md6 lg4>
+                    <div id="buttonArea">
+                    <v-flex sm12 md6 lg10>
+                        <v-col align-self="center">
+                            <br>
+                            <v-file-input 
+                            id="file_input"
+                            @change="handleUpload($event)" 
+                            accept="video/*"
+                            dense
+                            outlined
+                            show-size
+                            color="primary"
+                            background-color="white"
+                            label="영상을 선택해 주세요."
+                            >
+                                <template v-slot:selection="{ text }">
+                                    <v-chip
+                                        small
+                                        label
+                                        color="black"
+                                        text-color="white"
+                                    >
+                                        {{text}}
+                                    </v-chip>
+                                </template>
+                            </v-file-input>
+                        </v-col>
+                    </v-flex>
+                    <v-flex sm12 md6 lg12>
+                        <v-flex align-self="center">
+                            <v-btn id ="upload_btn" @click="uploadFunc">
+                                Upload
+                                <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
+                            </v-btn>
+                            <v-btn id ="result_btn" @click="uploadFunc">
+                                Go To Result
+                                <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
+                            </v-btn>
+                        </v-flex>
+                    </v-flex>
+                    </div>
+                </v-flex>
+            </v-layout>
+        </v-container>
 
         <v-speed-dial fixed bottom right open-on-hover v-model="fab" style="margin-bottom: 100px;">
             <v-btn
@@ -89,9 +136,9 @@
 
         <v-bottom-navigation
                 dark
-                fixed
                 color="#292929"
                 height="100"
+                fixed
         >
             <div class="title font-weight-light grey--text text--lighten-1 text-center" style="line-height: 100px;">
                 &copy; {{ (new Date()).getFullYear() }} — AI Interview — Made with 💜 by Team.Aight
@@ -119,6 +166,10 @@ export default {
             videosrc: null,
             videotype:null,
             uid: "",
+            currentFile: undefined,
+            progress: 0,
+            message: "",
+            fileInfos: [],
         }
     },
     created() {
@@ -139,6 +190,10 @@ export default {
         this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
     },
     methods:{
+        selectFile(file){
+            this.progress = 0;
+            this.currentFile = file;
+        },
         logout(){
             this.$session.destroy();
             this.$router.push("/");
@@ -153,15 +208,31 @@ export default {
             // console.log(event)
             // var filePath = event.value;
             // console.log(event)
-            this.upload_file = event;
+            if(this.upload_file.length == 0){
+                this.upload_file = event;
+            }else{
+                this.upload_file = [];
+                console.log(this.upload_file)
+            }
+            
             // console.log(this.upload_file)
-            this.videosrc= event.name;
+            // this.videosrc= event.name;
             
             console.log(document.getElementById("file_input").files[0])
         },
+        uploadFunc(){
+            if(this.upload_file.length == 0){
+                alert("영상 파일을 올려 주세요.")
+                return;
+            }else{
+                this.uploadFile()
+            }
+        },
         async uploadFile(){
+            console.log("uploadFile : " + this.upload_file)
+            
             let uploadToServer = function(socket, data) {
-                socket.emit('uploadFile', {'data' : data})
+            socket.emit('uploadFile', {'data' : data})
             };
             this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type };
             let fileName = 'kang';
@@ -171,49 +242,90 @@ export default {
                 this.videoSrc = `../../../../face_api/videos/${fileName}/${fileName}1.${fileType}`;
                 console.log(this.videoSrc);
                 console.log(data);
-                // let path = JSON.parse(data['data'])['path'];
-                // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
-                // console.log(this.videosrc);
+                    // let path = JSON.parse(data['data'])['path'];
+                    // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
+                    // console.log(this.videosrc);
             });
             this.socket.on('res', function(data) {
                 console.log(data);
             });
             this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
             console.log(this.videosrc);
+        }    
 
         }
-    }
+    
 }
 </script>
 
 <style>
-    .videoapp {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+#mainContainer {
+        /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-        background-image: url("../../assets/images/background.png");
-    }
-    #videoPlay {
+        color: #2c3e50; */
+        margin-top: 10%;
+        margin-left: 3%;
         width: 100%;
-        height: 100%;
+        height: 75%;
         
     }
-    a{ color: black; }
-    a:link { text-decoration: none; }
-    a:visited { text-decoration: none; }
-    a:hover { color: blue; }
-    a:active { text-decoration: none; }
-
-    .back{
-        background-image: url("../../assets/images/bbback.jpg");
+    #videoapp{
+        background-image: url("../../assets/images/background.png");
         background-size: cover;
         height: 100%;
     }
+    #videoPlay {
+        margin-left: 2%;
+        width: 90%;
+        height: 100%; 
+    }
+    #buttonArea {
+        margin-top: 10%;
+    }
+    /* a{ color: black; }
+    a:link { text-decoration: none; }
+    a:visited { text-decoration: none; }
+    a:hover { color: blue; }
+    a:active { text-decoration: none; } */
+
+    /* .back{
+        background-image: url("../../assets/images/bbback.jpg");
+        background-size: cover;
+        height: 100%;
+    } */
+    #upload_btn{
+        margin-left: 5%;
+    }
+    #result_btn{
+        margin-left: 20%;
+    }
     #file_input{
 
-        width: 50%;
+        margin-left: 30%;
     }
+@media screen and (min-width: 960px) {
+
+    #buttonArea {
+        margin-top: 10%;
+    }
+}
+
+@media screen and (max-width: 960px) {
+
+    #buttonArea {
+        margin-top: 5%;
+    }
+
+    #upload_btn{
+        margin-left: 10%;
+    }
+    #result_btn{
+        margin-left: 30%;
+    }
+}
+
+
+    
 </style>
