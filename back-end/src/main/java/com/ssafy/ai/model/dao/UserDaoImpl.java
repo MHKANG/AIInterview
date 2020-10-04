@@ -46,10 +46,5 @@ public class UserDaoImpl implements UserDao {
 		return template.selectOne(ns + "selectByUid", uid);
 		
 	}
-	
-	@Override
-	public String checkEmail(String uid) {
-	    return template.selectOne(ns + "checkEmail", uid);
-	}
 
 }

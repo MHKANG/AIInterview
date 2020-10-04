@@ -46,10 +46,5 @@ public class UserServiceImpl implements UserService{
 	public User selectByUid(String uid) {
 		return uDao.selectByUid(uid);
 	}
-	
-	@Override
-	 public String checkEmail(String uid) {
-	     return uDao.checkEmail(uid);
-	 }
 
 }
