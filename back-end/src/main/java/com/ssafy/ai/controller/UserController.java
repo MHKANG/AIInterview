@@ -2,6 +2,9 @@ package com.ssafy.ai.controller;
 
 import java.util.List;
 
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.ai.model.dto.User;
@@ -112,17 +114,4 @@ public class UserController {
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
-	
-	@ApiOperation(value = "User의 이메일을 반환한다.", response = List.class)
-	   @GetMapping("/emailCheck")
-	   public ResponseEntity<Boolean> checkEmail(@RequestParam String email) throws Exception {
-	      logger.debug("User / checkEmail - 호출");
-	      boolean is_existed = false;
-	      String result = uService.checkEmail(email);
-	      if (result != null) {
-	         is_existed = true;
-	      }
-	      return new ResponseEntity<Boolean>(is_existed, HttpStatus.OK);
-	   }
-	
 }

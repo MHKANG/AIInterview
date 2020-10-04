@@ -51,10 +51,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from User
 		where uid = #{uid}
 	</select>
-	
-	<select id="checkEmail" parameterType="String" resultType="String">
-      select uid from user
-      where uid =#{uid}
-    </select>
 
 </mapper>
