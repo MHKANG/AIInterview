@@ -19,7 +19,6 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "socketio-file-upload": "^0.7.2",
-    "videojs-record": "^4.1.0",
     "vue": "^2.6.11",
     "vue-cli": "^2.9.6",
     "vue-material": "^1.0.0-beta-15",
@@ -28,7 +27,8 @@
     "vue-session": "^1.0.0",
     "vue-socket.io": "3.0.5",
     "vuetify": "^2.3.10",
-    "webrtc-adapter": "^7.7.0"
+    "vuex": "^3.5.1",
+    "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
