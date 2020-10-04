@@ -183,7 +183,7 @@
 <script>
 // import PV from "password-validator";
 // import * as EmailValidator from "email-validator";
-import axios from '@/utils/api';
+// import axios from '@/utils/api';
 
 export default {
   data: () => {
@@ -197,7 +197,7 @@ export default {
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
           title: '팀원 강명훈',
-          text: 'Back-End',
+          text: 'Front-End',
         },
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
@@ -207,7 +207,7 @@ export default {
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
           title: '팀원 박춘화',
-          text: 'Front-end & Python',
+          text: 'Back-end & Python',
         },
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
@@ -244,22 +244,36 @@ export default {
       else {
         console.log(uid, password);
 
-        axios.post("/user/login", {
-          uid: this.uid,
-          password: this.password
+        // axios.post("/user/login", {
+        //   uid: this.uid,
+        //   password: this.password
+        // })
+        // .then(response =>{
+        //   console.log(response);
+        //   if (response.data.status) {
+        //     this.$session.set("user", response.data.userinfo);
+        //     console.log(this.$session.has("user"));
+        //     this.$router.push("/main");
+        //   }
+        // })
+        // .catch(err => {
+        //   console.log(err)
+        //   alert("아이디, 비밀번호를 확인해주세요.")
+        // })
+
+        this.$store.dispatch("login", {
+          uid : this.uid,
+          password : this.password
         })
-        .then(response =>{
-          console.log(response);
-          if (response.data.status) {
-            this.$session.set("user", response.data.userinfo);
-            console.log(this.$session.has("user"));
+          .then((res) =>{
+            console.log(res);
+            console.log("로그인성공");
             this.$router.push("/main");
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          alert("아이디, 비밀번호를 확인해주세요.")
-        })
+          })
+          .catch((err) =>{
+            console.log(err);
+            console.log("로그인 실패");
+          })
       }
     },
     goJoin() {

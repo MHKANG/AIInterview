@@ -127,7 +127,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: "http://localhost:8081/api/user",
+          url: "http://localhost:8080/api/user/signup",
           data: {
             uid: this.email,
             password: this.password,
@@ -143,7 +143,7 @@ export default {
           .then((data) => {
             console.dir(data);
             let msg = "회원 가입 중 문제가 발생";
-            if (data.data == "success") {
+            if (data.data.status) {
               msg = "회원 가입 완료";
             }
             alert(msg);
