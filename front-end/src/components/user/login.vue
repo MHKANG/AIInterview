@@ -183,7 +183,7 @@
 <script>
 // import PV from "password-validator";
 // import * as EmailValidator from "email-validator";
-import axios from '@/utils/api';
+// import axios from '@/utils/api';
 
 export default {
   data: () => {
@@ -244,22 +244,36 @@ export default {
       else {
         console.log(uid, password);
 
-        axios.post("/user/login", {
-          uid: this.uid,
-          password: this.password
+        // axios.post("/user/login", {
+        //   uid: this.uid,
+        //   password: this.password
+        // })
+        // .then(response =>{
+        //   console.log(response);
+        //   if (response.data.status) {
+        //     this.$session.set("user", response.data.userinfo);
+        //     console.log(this.$session.has("user"));
+        //     this.$router.push("/main");
+        //   }
+        // })
+        // .catch(err => {
+        //   console.log(err)
+        //   alert("아이디, 비밀번호를 확인해주세요.")
+        // })
+
+        this.$store.dispatch("login", {
+          uid : this.uid,
+          password : this.password
         })
-        .then(response =>{
-          console.log(response);
-          if (response.data.status) {
-            this.$session.set("user", response.data.userinfo);
-            console.log(this.$session.has("user"));
+          .then((res) =>{
+            console.log(res);
+            console.log("로그인성공");
             this.$router.push("/main");
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          alert("아이디, 비밀번호를 확인해주세요.")
-        })
+          })
+          .catch((err) =>{
+            console.log(err);
+            console.log("로그인 실패");
+          })
       }
     },
     goJoin() {
