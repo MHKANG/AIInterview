@@ -1,9 +1,11 @@
 package com.ssafy.ai.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
-
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.ai.model.dto.User;
 import com.ssafy.ai.model.response.BasicResponse;
 import com.ssafy.ai.model.response.UserInfoResponse;
+import com.ssafy.ai.model.service.JwtService;
 import com.ssafy.ai.model.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +42,9 @@ public class UserController {
 
 	@Autowired
 	private UserService uService;
+	
+	@Autowired
+	private JwtService jwtService;
 
 	@ApiOperation(value = "모든 User의 정보를 반환한다.", response = List.class)
 	@GetMapping
@@ -56,21 +62,24 @@ public class UserController {
 		return new ResponseEntity<User>(uService.select(user_pk), HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "login 한다", response = String.class)
+	@ApiOperation(value = "로그인", response = String.class)
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody User u) throws Exception {
+	public ResponseEntity<String> login(@RequestBody User u, HttpServletResponse res) throws Exception {
 		logger.debug("User / login - 호출");
 		String userid = u.getUid();
 		String password = u.getPassword();
 		
 		ResponseEntity response = null;
-		User tmp = uService.selectByUid(userid);
-
-		if(userid.equals(tmp.getUid()) && password.equals(tmp.getPassword())) {
+		Object login_res = uService.login(u);
+		if(!login_res.equals("password") && !login_res.equals("email")) {
 			final UserInfoResponse result = new UserInfoResponse();
+			String token = jwtService.create((User)login_res);
+			String encoded = URLEncoder.encode(((User)login_res).getNickname(), "UTF-8");
+			res.setHeader("jwt-auth-token", token);
+			res.setHeader("nickname", encoded);
             result.status = true;
             result.data = "success";
-			result.userinfo = tmp;
+			result.userinfo = (User)login_res;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		}else {
 			final BasicResponse result = new BasicResponse();
@@ -83,17 +92,26 @@ public class UserController {
 	}
 
 
-	@ApiOperation(value = "User의 정보를 삽입한다.", response = String.class)
-	@PostMapping
+	@ApiOperation(value = "회원 가입", response = String.class)
+	@PostMapping("/signup")
 	public ResponseEntity<String> insert(@RequestBody User u) {
 		logger.debug("User / insert - 호출");
-		if (uService.insert(u) != 0) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		ResponseEntity response = null;
+		final BasicResponse result = new BasicResponse();
+		
+		if (uService.SignUp(u) != 0) {
+			result.status = true;
+			result.data = "회원 가입 성공";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}else {
+			result.status = false;
+			result.data = "회원 가입 실패";
+			response = new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+		return response;
 	}
 
-	@ApiOperation(value = "User 정보를 수정한다", response = String.class)
+	@ApiOperation(value = "회원 정보 수정", response = String.class)
 	@PutMapping()
 	public ResponseEntity<String> update(@RequestBody User u) {
 		logger.debug("User / update - 호출");
@@ -113,5 +131,22 @@ public class UserController {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+	}
+	
+	@ApiOperation(value = "jwt 재발 급")
+	@GetMapping("/user/extendJWT")
+	public Object extendJWT(HttpServletRequest req, HttpServletResponse res)throws UnsupportedEncodingException{
+		ResponseEntity<BasicResponse> response = null;
+		final BasicResponse result = new BasicResponse();
+		User user = uService.selectByNickname(req.getHeader("nickname"));
+		String token = jwtService.create(user);
+		String encoded = URLEncoder.encode(user.getNickname(), "UTF-8");
+		res.setHeader("jwt-auth-token", token);
+		res.setHeader("nickname", encoded);
+		result.status = true;
+		result.data = "토큰이 재발급 되었습니다.";
+		
+		response = new ResponseEntity<>(result, HttpStatus.CREATED);
+		return response;
 	}
 }

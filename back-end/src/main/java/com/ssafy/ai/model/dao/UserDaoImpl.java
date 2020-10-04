@@ -46,5 +46,10 @@ public class UserDaoImpl implements UserDao {
 		return template.selectOne(ns + "selectByUid", uid);
 		
 	}
+	
+	@Override
+	public User selectByNickname(String nickname) {
+		return template.selectOne(ns+ "selectByNickname", nickname);
+	}
 
 }
