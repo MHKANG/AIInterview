@@ -76,6 +76,7 @@ public class UserController {
 			final UserInfoResponse result = new UserInfoResponse();
 			String token = jwtService.create((User)login_res);
 			String encoded = URLEncoder.encode(((User)login_res).getUsername(), "UTF-8");
+			System.out.println(encoded);
 			res.setHeader("jwt-auth-token", token);
 			res.setHeader("username", encoded);
 			
