@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService{
 		Object res = null;
 		User check = uDao.selectByUid(u.getUid());
 		System.out.println(check.toString());
-		if(check !=null) {
+		if(check != null) {
 			if(bcrpytimpl.isMatch(u.getPassword(), check.getPassword())){
 				res = check;
 			}else {
