@@ -40,6 +40,7 @@
                     <v-btn fab dark large color ="red darken-4" id ="actionBtn">Record</v-btn>
                     <a :href=downloadChart download='다운로드.png' id="resultBtn"><v-btn fab dark large color ="black darken-4">Result</v-btn></a>
                     <v-btn fab dark large color ="orange darken-4" id ="initializeBtn" @click="() => initializeChart()">초기화</v-btn>
+                    <v-btn fab dark large color ="blue darken-4" id ="uploadBtn" @click="() => uploadData(realTimeArray)">업로드</v-btn>
                 </div>
             </section>
         </v-main>
@@ -91,6 +92,8 @@
 import io from 'socket.io-client'
 import cv from 'opencv.js'
 import Chart from 'chart.js'
+import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
     name: 'socketTest',
@@ -207,6 +210,11 @@ export default {
             }
             });
     },
+    computed : {
+        ...mapGetters([
+            'userpk',
+            'nickname',
+        ])},
     methods :{
         onCvLoaded(){
             cv.onRuntimeInitialized = this.onReady();
@@ -405,6 +413,28 @@ export default {
 
             this.realTimeArray.push(point);
             return;
+        },
+        uploadData(result) {
+            axios({
+            method: "post",
+            url: "http://localhost:8080/api/interviewresult",
+            data: {
+                user_pk : this.userpk,
+                username : this.nickname,
+                image_score : result[result.length-1],
+                image_score_list : result,
+                voice_score : 0,
+                silent_interval : '',
+                graph_image_url : '',
+                feedback : 'None',
+                video_length : 0,
+                is_live : true,
+                filename : 'None',
+                test_date : Date.now(),
+            },
+            }).then(res => {
+                console.log(res);
+            }).catch(err => console.log(err));
         }
     }
 }
@@ -434,6 +464,11 @@ export default {
   }
 
   #initializeBtn {
+      margin-left : 50px;
+      display : inline-block;
+  }
+
+  #uploadBtn {
       margin-left : 50px;
       display : inline-block;
   }
