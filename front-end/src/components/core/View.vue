@@ -34,7 +34,11 @@
                 AI 또는 화상면접을 연습해보고 싶나요?
               </base-text>
               <base-btn class="mt-4" @click="goInterview">
-                Let's Interview!
+                Let's Live Interview!
+              </base-btn>
+              <v-spacer/>
+              <base-btn class="mt-4" @click="goUpload">
+                Let's Video Upload!
               </base-btn>
             </v-col>
           </v-row>
@@ -122,6 +126,9 @@
       },
       goInterview(){
         this.$router.push('/interview');
+      },
+      goUpload(){
+        this.$router.push('/uploadVideo');
       }
     },
 

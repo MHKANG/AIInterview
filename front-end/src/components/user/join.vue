@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <div>
-      <h1>회원가입</h1>
-      <table>
+  <div id ="joinarea">
+    <div id="inputarea">
+      <h1 id="title">회원가입</h1>
+        
+        <table>
         <tr>
           <td class="td">이메일</td>
           <td class="td">
@@ -15,7 +16,7 @@
             />
           </td>
           <td class="td">
-            <v-btn text color="blue darken-3" @click="emailCheck"
+            <v-btn text color="blue darken-3" @click="emailCheck" outlined
               >중복확인</v-btn
             >
           </td>
@@ -76,11 +77,39 @@
         </tr>
       </table>
 
-      <v-col cols="5">
-        <v-btn text color="blue darken-3" @click="signIn">작성완료</v-btn>
-      </v-col>
+      
+        <v-btn 
+        id ="sign_btn"
+        text color="blue darken-3" 
+        @click="signIn"
+        outlined
+        >
+        작성완료
+        </v-btn>
+        <v-btn 
+        id ="complete_btn"
+        text color="blue darken-3" 
+        @click="goToPages"
+        outlined
+        >
+        메인 페이지로 돌아가기
+        </v-btn>
+      
     </div>
+
+    <v-bottom-navigation
+                dark
+                fixed
+                color="#292929"
+                height="100"
+        >
+        <div class="title font-weight-light grey--text text--lighten-1 text-center" style="line-height: 100px;">
+            &copy; {{ (new Date()).getFullYear() }} — AI Interview — Made with 💜 by Team.Aight
+        </div>
+    </v-bottom-navigation>
+
   </div>
+  
 </template>
 
 <script>
@@ -127,7 +156,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: "http://localhost:8080/api/user/signup",
+          url: "http://j3a308.p.ssafy.io:3306/api/user/signup",
           data: {
             uid: this.email,
             password: this.password,
@@ -135,7 +164,7 @@ export default {
             username: this.username,
             is_admin: false,
             is_activated: true,
-            auth_date: null,
+            auth_date: new Date,
             gender: this.el,
             age: this.age,
           },
@@ -151,6 +180,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+        
       }
       this.$router.push("/");
     },
@@ -159,7 +189,7 @@ export default {
       var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
       axios({
         method: "GET",
-        url: "http://localhost:8081/api/user/emailCheck?email=" + this.email,
+        url: "http://j3a308.p.ssafy.io:3306/api/user/emailCheck?email=" + this.email,
       })
         .then((data) => {
           let msg = "이미 가입된 이메일 입니다.";
@@ -191,5 +221,30 @@ export default {
 <style scoped>
 .td {
   padding: 20px;
+}
+#title{
+  margin-left: 35%;
+}
+#inputarea {
+  position: absolute;
+  margin-left: 35%;
+  justify-content: center;
+  background-color: white;
+  
+}
+#joinarea {
+  background-image: url("../../assets/images/background.png");
+  background-size: cover;
+  height: 100%;
+}
+#sign_btn{
+  margin-top: 10%;
+  margin-left: 20%;
+  margin-bottom: 10%;
+}
+#complete_btn{
+  margin-top: 10%;
+  margin-left: 10%;
+  margin-bottom: 10%;
 }
 </style>

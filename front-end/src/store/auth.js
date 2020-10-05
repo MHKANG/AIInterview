@@ -83,7 +83,7 @@ export const actions ={
                 url: '/user/signup',
                 data: {
                     uid,
-                    password : sha256(password),
+                    password,
                     nickname,
                     username,
                     auth_date,
@@ -92,7 +92,7 @@ export const actions ={
                 },
             })
                 .then((response)=>{
-                    if(200 <= response.status && response.status > 300){
+                    if(200 <= response.status && response.status < 300){
                         resolve(response);
                     }else{
                         reject(response);
