@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService{
 	public Object login(User u) {
 		Object res = null;
 		User check = uDao.selectByUid(u.getUid());
+		System.out.println(check.toString());
 		if(check !=null) {
 			if(bcrpytimpl.isMatch(u.getPassword(), check.getPassword())){
 				res = check;
@@ -73,5 +74,10 @@ public class UserServiceImpl implements UserService{
 		
 		return res;
 	}
+	
+	@Override
+    public String checkEmail(String uid) {
+        return uDao.checkEmail(uid);
+    }
 
 }

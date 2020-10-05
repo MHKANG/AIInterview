@@ -95,6 +95,14 @@ public class User {
 		this.age = age;
 	}	
 	
+	
+	
+	@Override
+	public String toString() {
+		return "User [user_pk=" + user_pk + ", uid=" + uid + ", password=" + password + ", nickname=" + nickname
+				+ ", username=" + username + ", is_admin=" + is_admin + ", is_activated=" + is_activated
+				+ ", auth_date=" + auth_date + ", gender=" + gender + ", age=" + age + "]";
+	}
 	public User() {}
 	
 }

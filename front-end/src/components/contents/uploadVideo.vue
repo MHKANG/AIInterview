@@ -174,6 +174,11 @@ export default {
             fileInfos: [],
         }
     },
+    computed : {
+        ...mapGetters([
+            'nickname',
+        ])
+    },
     created() {
       this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
@@ -194,7 +199,7 @@ export default {
     },
 
     updated() {
-        this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
+        // this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
     },
     methods:{
         selectFile(file){
@@ -257,10 +262,9 @@ export default {
                 console.log(result);
                 axios({
                 method: "post",
-                url: "http://localhost:8080/api/interviewresult",
+                url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
                 data: {
-                    user_pk : this.userpk,
-                    username : this.username,
+                    username : this.nickname,
                     image_score : parseFloat(result[result.length-1]),
                     image_score_list : result,
                     voice_score : 0,
@@ -275,7 +279,7 @@ export default {
                 }).then(res => {
                     console.log(res);
                     alert('영상 업로드가 완료되었습니다!');
-                }).cathc(err => console.log(err));
+                }).catch(err => console.log(err));
             });
         }    
 

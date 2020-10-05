@@ -32,7 +32,7 @@ public class SpringChat1Application implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		List<String> getMethodAdd = Arrays.asList("/api/user/*", "/api/interviewresult/*","/api/videos/*");
+		List<String> getMethodAdd = Arrays.asList("/api/user/extendJWT","/api/user","/api/interviewresult/*","/api/videos/*");
 		List<String> getMethodExclude = Arrays.asList("");
 		registry.addInterceptor(jwtInterceptorGet).addPathPatterns(getMethodAdd).excludePathPatterns(getMethodExclude);
 		

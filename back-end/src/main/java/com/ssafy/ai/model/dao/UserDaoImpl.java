@@ -51,5 +51,10 @@ public class UserDaoImpl implements UserDao {
 	public User selectByNickname(String nickname) {
 		return template.selectOne(ns+ "selectByNickname", nickname);
 	}
+	
+	@Override
+	 public String checkEmail(String uid) {
+	    return template.selectOne(ns + "checkEmail", uid);
+	 }
 
 }
