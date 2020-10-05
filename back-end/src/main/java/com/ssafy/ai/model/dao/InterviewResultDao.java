@@ -15,4 +15,6 @@ public interface InterviewResultDao {
 	public int delete(int ir_id);
 
 	public int update(InterviewResult ir);
+	
+	public List<InterviewResult> selectByUsername(String username);
 }

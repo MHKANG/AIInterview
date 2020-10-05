@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.ai.model.dto.User;
@@ -74,9 +75,11 @@ public class UserController {
 		if(!login_res.equals("password") && !login_res.equals("email")) {
 			final UserInfoResponse result = new UserInfoResponse();
 			String token = jwtService.create((User)login_res);
-			String encoded = URLEncoder.encode(((User)login_res).getNickname(), "UTF-8");
+			String encoded = URLEncoder.encode(((User)login_res).getUsername(), "UTF-8");
 			res.setHeader("jwt-auth-token", token);
-			res.setHeader("nickname", encoded);
+			res.setHeader("username", encoded);
+			
+			res.setHeader("userpk", Integer.toString(((User)login_res).getUser_pk()));
             result.status = true;
             result.data = "success";
 			result.userinfo = (User)login_res;
@@ -98,7 +101,7 @@ public class UserController {
 		logger.debug("User / insert - 호출");
 		ResponseEntity response = null;
 		final BasicResponse result = new BasicResponse();
-		
+		System.out.println(u.getNickname());
 		if (uService.SignUp(u) != 0) {
 			result.status = true;
 			result.data = "회원 가입 성공";
@@ -121,6 +124,8 @@ public class UserController {
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
+	
+	
 
 	@ApiOperation(value = "User 삭제한다", response = String.class)
 	@DeleteMapping("{user_pk}")
@@ -143,10 +148,23 @@ public class UserController {
 		String encoded = URLEncoder.encode(user.getNickname(), "UTF-8");
 		res.setHeader("jwt-auth-token", token);
 		res.setHeader("nickname", encoded);
+		res.setHeader("userpk", Integer.toString(user.getUser_pk()));
 		result.status = true;
 		result.data = "토큰이 재발급 되었습니다.";
 		
 		response = new ResponseEntity<>(result, HttpStatus.CREATED);
 		return response;
 	}
+	
+	@ApiOperation(value = "User의 이메일을 반환한다.", response = List.class)
+    @GetMapping("/emailCheck")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) throws Exception {
+       logger.debug("User / checkEmail - 호출");
+       boolean is_existed = false;
+       String result = uService.checkEmail(email);
+       if (result != null) {
+          is_existed = true;
+       }
+       return new ResponseEntity<Boolean>(is_existed, HttpStatus.OK);
+    }
 }

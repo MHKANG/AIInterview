@@ -19,4 +19,6 @@ public interface UserDao {
 	public User selectByUid(String uid);
 	
 	public User selectByNickname(String nickname);
+	
+	public String checkEmail(String uid);
 }

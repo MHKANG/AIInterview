@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="selectByUid" parameterType="String" resultType="user">
-		select * from User
+		select user_pk, uid, password, nickname, username, is_admin, is_activated, auth_date, gender, age  from User
 		where uid = #{uid}
 	</select>
 	
@@ -56,5 +56,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from User
 		where nickname =#{nickname}
 	</select>
+	
+	<select id="checkEmail" parameterType="String" resultType="String">
+      select uid from user
+      where uid =#{uid}
+    </select>
+	
 
 </mapper>

@@ -31,21 +31,21 @@ public class JwtService {
 				.setAudience(user.getNickname())
 				.setIssuedAt(new Date());
 		
-		builder.signWith(SignatureAlgorithm.HS256, user.getNickname().getBytes());
+		builder.signWith(SignatureAlgorithm.HS256, user.getUsername().getBytes());
 		
 		final String jwt = builder.compact();
 		
 		return jwt;
 	}
 	
-	public void checkValid(final String jwt, final String nickname) throws Exception{
-		Jwts.parser().setSigningKey(nickname.getBytes()).parseClaimsJws(jwt);
+	public void checkValid(final String jwt, final String username) throws Exception{
+		Jwts.parser().setSigningKey(username.getBytes()).parseClaimsJws(jwt);
 	}
 	
-	public Map<String, Object> get(final String jwt, final String nickname){
+	public Map<String, Object> get(final String jwt, final String username){
 		Jws<Claims> claims = null;
 		try {
-			claims = Jwts.parser().setSigningKey(nickname.getBytes()).parseClaimsJws(jwt);
+			claims = Jwts.parser().setSigningKey(username.getBytes()).parseClaimsJws(jwt);
 		}catch(final Exception e) {
 			throw new RuntimeException();
 		}
