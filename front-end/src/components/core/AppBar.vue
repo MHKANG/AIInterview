@@ -8,7 +8,7 @@
     <v-slide-x-transition>
       <v-img
         v-if="showLogo"
-        :src="require('@/assets/logo.png')"
+        :src="require('@/assets/images/ProjectLogo.png')"
         class="shrink"
         contain
         height="50"
@@ -58,7 +58,10 @@
         this.showLogo = offset > 200
       },
       logout(){
-        this.$session.destroy();
+        this.$store.dispatch('logout');
+        // this.$session.destroy();
+
+        alert("로그아웃 됬습니다.")
         this.$router.push("/");
       },
     },

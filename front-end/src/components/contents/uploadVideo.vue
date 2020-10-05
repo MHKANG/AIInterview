@@ -151,6 +151,7 @@
 
 import VuePlyr from 'vue-plyr'
 import io from 'socket.io-client'
+import { mapGetters } from 'vuex'
 
 export default {
     name : 'uploadVideo',
@@ -173,14 +174,19 @@ export default {
         }
     },
     created() {
-      // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+      this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
-        this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+        // this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
 
         // this.uid = this.$session.get("user").uid;
         this.uid = "kang";
         this.fab = false;
        
+    },
+    computed:{
+        ...mapGetters([
+            'nickname',
+        ])
     },
     mounted(){
         
@@ -195,11 +201,11 @@ export default {
             this.currentFile = file;
         },
         logout(){
-            this.$session.destroy();
+            this.$store.dispatch('logout');
             this.$router.push("/");
         },
         goHome(){
-        this.$router.push('/');
+        this.$router.push('/main');
         },
         handleUpload(event){
             // this.upload_file = event.target.files[0];
@@ -234,8 +240,8 @@ export default {
             let uploadToServer = function(socket, data) {
             socket.emit('uploadFile', {'data' : data})
             };
-            this.upload = {'uid' :this.uid,'file' : this.upload_file, 'type' : this.upload_file.type };
-            let fileName = 'kang';
+            this.upload = {'uid' :this.nickname,'file' : this.upload_file, 'type' : this.upload_file.type };
+            let fileName = this.nickname;
             let fileType = this.upload_file.type.split('/')[1];
             await uploadToServer(this.socket, this.upload);
             this.socket.on('success', function(data) {
@@ -259,7 +265,7 @@ export default {
 </script>
 
 <style>
-#mainContainer {
+    #mainContainer {
         /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
