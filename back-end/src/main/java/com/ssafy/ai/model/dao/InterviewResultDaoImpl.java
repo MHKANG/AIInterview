@@ -26,6 +26,10 @@ public class InterviewResultDaoImpl implements InterviewResultDao{
 	public InterviewResult select(int ir_id) {
 		return template.selectOne(ns + "select", ir_id);
 	}
+	@Override
+	public List<InterviewResult> selectByUsername(String username) {
+		return template.selectList(ns +"selectByUsername", username);
+	}
 
 	@Override
 	public int insert(InterviewResult ir) {
@@ -41,6 +45,5 @@ public class InterviewResultDaoImpl implements InterviewResultDao{
 	public int update(InterviewResult ir) {
 		return template.update(ns + "update", ir);
 	}
-	
 	
 }

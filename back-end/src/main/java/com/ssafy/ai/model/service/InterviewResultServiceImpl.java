@@ -40,5 +40,9 @@ public class InterviewResultServiceImpl implements InterviewResultService{
 	public int update(InterviewResult ir) {
 		return irDao.update(ir);
 	}
-
+	
+	@Override
+	public List<InterviewResult> selectByUsername(String username){
+		return irDao.selectByUsername(username);
+	}
 }

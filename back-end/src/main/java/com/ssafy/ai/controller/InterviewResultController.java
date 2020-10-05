@@ -2,8 +2,6 @@ package com.ssafy.ai.controller;
 
 import java.util.List;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +50,13 @@ public class InterviewResultController {
 
 		return new ResponseEntity<InterviewResult>(irService.select(ir_id), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "유저 이름으로 저장된 인터뷰 결과 값 가져오기", response = InterviewResult.class)
+	@GetMapping("select/username/{username}")
+	public ResponseEntity<List<InterviewResult>> getVideoUsername(@PathVariable String username) {
+		
+		return new ResponseEntity<List<InterviewResult>>(irService.selectByUsername(username), HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "InterviewResult의 정보를 삽입한다.", response = String.class)
 	@PostMapping
@@ -84,4 +89,5 @@ public class InterviewResultController {
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
+	
 }

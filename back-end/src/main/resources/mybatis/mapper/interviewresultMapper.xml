@@ -15,6 +15,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from InterviewResult
 		where ir_id = #{ir_id}
 	</select>
+	
+	<select id="selectByUsername" parameterType="String" resultType="interviewresult">
+		select * 
+		from InterviewResult
+		where username =#{username}
+	</select>
 
 	<insert id="insert" parameterType="interviewresult">
 		insert into
