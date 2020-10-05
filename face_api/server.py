@@ -129,9 +129,6 @@ def video_analysis(username, video_type):
             'point_list' : point_list
         }
         emit("res", {'data' : json.dumps(result_data)})
-        # print(point)
-        # print(point_list)
-        # print(emo_list)
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -201,7 +198,6 @@ def uploadFile(data):
         f.write(video_file);
     user_path = os.path.abspath('./videos/{0}'.format(username))
     emit("success", {'data' : json.dumps('')})
-    # emit("success", {'data' : json.dumps({'path':user_path})})
     video_analysis(username, video_type)
 
 cut_size = 44

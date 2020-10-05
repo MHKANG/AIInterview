@@ -173,6 +173,12 @@ export default {
             fileInfos: [],
         }
     },
+    computed : {
+        ...mapGetters([
+            'userpk',
+            'nickname',
+        ])
+    },
     created() {
       this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
@@ -246,17 +252,36 @@ export default {
             await uploadToServer(this.socket, this.upload);
             this.socket.on('success', function(data) {
                 this.videoSrc = `../../../../face_api/videos/${fileName}/${fileName}1.${fileType}`;
-                console.log(this.videoSrc);
                 console.log(data);
                     // let path = JSON.parse(data['data'])['path'];
                     // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
                     // console.log(this.videosrc);
             });
             this.socket.on('res', function(data) {
-                console.log(data);
+                let result = JSON.parse(data['data'])['point_list'];
+                console.log(result);
+                axios({
+                method: "post",
+                url: "http://localhost:8080/api/interviewresult",
+                data: {
+                    user_pk : this.userpk,
+                    username : this.nickname,
+                    image_score : parseFloat(result[result.length-1]),
+                    image_score_list : result,
+                    voice_score : 0,
+                    silent_interval : '',
+                    graph_image_url : '',
+                    feedback : 'None',
+                    video_length : 0,
+                    is_live : false,
+                    filename : fileName,
+                    test_date : Date.now(),
+                },
+                }).then(res => {
+                    console.log(res);
+                    alert('영상 업로드가 완료되었습니다!');
+                }).cathc(err => console.log(err));
             });
-            this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
-            console.log(this.videosrc);
         }    
 
         }
