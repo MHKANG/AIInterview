@@ -33,11 +33,12 @@
             <section id = "interview">
 
                 <div class ="text-center" style ="margin-top:200px">
-                    <video id="inputVideo" :width=width :height=height poster="../../assets/images/webcam_2.jpg"></video>
+                    <video id="inputVideo" style="display:inline" :width=width :height=height poster="../../assets/images/webcam_2.jpg"></video>
+                    <canvas id="myChart" style="display:inline" :width=width :height=height></canvas>
                 </div>
-
                 <div class ="text-center" style ="margin-top:40px">
                     <v-btn fab dark large color ="red darken-4" id ="actionBtn">Record</v-btn>
+                    <a :href=downloadChart download='result.png'><v-btn fab dark large color ="black darken-4" id="resultBtn">Result</v-btn></a>
                 </div>
             </section>
         </v-main>
@@ -82,11 +83,13 @@
 </template>
 
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
+<script>
 // const io = require('socket.io-client')
 import io from 'socket.io-client'
 import cv from 'opencv.js'
+import Chart from 'chart.js'
 
 export default {
     name: 'socketTest',
@@ -99,12 +102,18 @@ export default {
             videodata : null,
             cap : null,
             actionBtn: null,
+            resultBtn: null,
             streaming : false,
             stream : null,
             width : 0,
             height : 0,
             FPS : 30,
             fab: false,
+            realTimeResult : {'emotion':[], 'value':[]},
+            realTimeIndex : [0],
+            realTimeArray : [50],
+            chart : null,
+            downloadChart : null,
         }
     },
     created(){
@@ -116,7 +125,7 @@ export default {
             // console.log(socket);
             this.message = socket;
             console.log(this.message);
-        })
+        });
         // console.log("End")
         this.width = 320
         this.height = 240
@@ -125,9 +134,73 @@ export default {
     mounted(){
         this.videodata = document.getElementById('inputVideo');
         this.actionBtn = document.getElementById('actionBtn');
-        
+        this.resultBtn = document.getElementById('resultBtn');
+
         this.onCvLoaded();
         this.cap = new cv.VideoCapture(this.videodata);
+
+        var ctx = document.getElementById('myChart').getContext("2d");
+
+        this.downloadChart = document.getElementById('myChart').toDataURL('image/png');
+
+        var gradientFill = ctx.createLinearGradient(500, 0, 100, 0);
+        gradientFill.addColorStop(0, "rgba(128, 182, 244, 1)");
+        gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.6)");
+
+        this.chart = new Chart(ctx, {
+        type: 'line',
+        chartArea: {
+        backgroundColor: 'rgba(0, 0, 0, 255)'
+        },
+        data: {
+            labels : this.realTimeIndex,
+            datasets : [
+                {
+                label : '실시간 결과',
+                data : this.realTimeArray,
+                borderColor: "#80b6f4",
+                pointBorderColor: "#80b6f4",
+                pointBackgroundColor: "#80b6f4",
+                pointHoverBackgroundColor: "#80b6f4",
+                pointHoverBorderColor: "#80b6f4",
+                pointBorderWidth: 1,
+                pointHoverRadius: 1,
+                pointHoverBorderWidth: 1,
+                pointRadius: 1,
+                fill: true,
+                backgroundColor : gradientFill,
+                borderWidth: 4,}
+            ]
+        },
+        options: {
+            responsive : false,
+            title: {
+            display: true,
+            text: '면접 테스트'
+        },
+        },
+        legend : {
+            display : false,
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    display : false,
+                },
+                gridLines: {
+                    display: false,
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    display : false,
+                    },
+                gridLines: {
+                    display: false,
+                }
+            }],
+            }
+            });
     },
     methods :{
         onCvLoaded(){
@@ -135,13 +208,17 @@ export default {
         },
         onReady(){
 
+            let resultBtn = this.resultBtn;
+
             this.actionBtn.addEventListener('click', ()=>{
                 if(this.streaming){
                     this.stop();
                     this.actionBtn.textContent ='Record';
+                    resultBtn.style.display = 'inline-block';
                 }else{
                     this.Record();
                     this.actionBtn.textContent ='Stop'
+                    resultBtn.style.display = 'none';
                 }
             });
         },
@@ -187,11 +264,30 @@ export default {
             
             await uploadToServer(this.socket, this.src.data);
 
-            this.socket.on('res', function(data) {
-                console.log(data);
+            const realTimeResultArray = this.realTimeResult;
+
+            this.socket.on('res', await function(data) {
+                let result = JSON.parse(data['data'])['emotion'];
+                let mostEmotion = '';
+                let mostValue = 0;
+                for (var emotion in result) {
+                    if (result[emotion] > mostValue) {
+                        mostEmotion = emotion;
+                        mostValue = result[emotion];
+                    }
+                }
+                realTimeResultArray.emotion.push(mostEmotion);
+                realTimeResultArray.value.push(mostValue);
             });
 
-            // console.log(this.cap);
+            let lastPoint = this.realTimeArray[this.realTimeArray.length-1];
+            this.calculatePoint(this.realTimeResult, lastPoint);
+            this.realTimeIndex.push(this.realTimeIndex.length);
+
+            this.chart.update();
+
+            this.downloadChart = document.getElementById('myChart').toDataURL('image/png');
+
             const delay = 1000/this.FPS - (Date.now() - begin);
             setTimeout(this.processVideo, delay+1000);
         },
@@ -202,6 +298,39 @@ export default {
         goHome(){
         this.$router.push('/');
         },
+        calculatePoint(result, point) {
+            let emotion = result.emotion[result.emotion.length-1];
+            switch (emotion) {
+                case 'Happy':
+                    point += 1.5;
+                    break;
+                case 'Surpirse':
+                    point += 0.5;
+                    break;
+                case 'Neutral':
+                    break;
+                case 'Fear':
+                    point -= 0.5;
+                    break;
+                case 'Sad':
+                    point -= 1.5;
+                    break;
+                case 'Angry':
+                    point -= 2.5;
+                    break;
+                default:
+                    break;
+            };
+
+            if (point > 100) {
+                point = 100;
+            } else if (point < 0) {
+                point = 0;
+            };
+
+            this.realTimeArray.push(point);
+            return;
+        }
     }
 }
 </script>
@@ -217,5 +346,15 @@ export default {
     background-image: url("../../assets/images/background.png");
     background-size: cover;
     height: 100%;
+  }
+
+  #myChart{
+      margin-left : 50px;
+      background-color: white;
+  }
+
+  #resultBtn {
+      margin-left : 50px;
+      display : none;
   }
 </style>
