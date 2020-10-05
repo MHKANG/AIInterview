@@ -7,31 +7,31 @@ import {sha256} from '../utils/hash';
 Vue.use(Vuex);
 
 export const state ={
-    nickname: '',
+    username: '',
     jwtAuthToken: '',
 };
 
 export const mutations ={
-    LOGIN_SUCCESS(state, { jwtAuthToken, nickname }){
+    LOGIN_SUCCESS(state, { jwtAuthToken, username }){
         state.jwtAuthToken = jwtAuthToken;
-        state.nickname = decodeURI(nickname);
+        state.username = decodeURI(username);
     },
-    TOKEN_UPDATE_SUCCESS(state, {jwtAuthToken, nickname}){
+    TOKEN_UPDATE_SUCCESS(state, {jwtAuthToken, username}){
         state.jwtAuthToken = jwtAuthToken;
-        state.nickname = decodeURI(nickname);
+        state.username = decodeURI(username);
     },
     LOGOUT(state){
-        state.nickname = null;
+        state.username = null;
         state.jwtAuthToken = null;
     }
 };
 
 export const getters = {
-    encodedNickname: (state) =>{
-        return encodeURI(state.nickname);
+    encodedUsername: (state) =>{
+        return encodeURI(state.username);
     },
     nickname: (state) =>{
-        return state.nickname;
+        return state.username;
     },
     jwtAuthToken: (state)=>{
         return state.jwtAuthToken;
@@ -54,10 +54,10 @@ export const actions ={
                 .then((response)=>{
                     if(200 <= response.status && response.status < 300){
                         const jwtAuthToken = response.headers['jwt-auth-token'];
-                        const nickname = response.headers['nickname'];
+                        const username = response.headers['username'];
 
 
-                        commit('LOGIN_SUCCESS', {jwtAuthToken, nickname});
+                        commit('LOGIN_SUCCESS', {jwtAuthToken, username});
                         
                         resolve(response);
                     }else{
@@ -103,13 +103,13 @@ export const actions ={
                 });
         }) 
     },
-    fetchUser({ nickname }) {
+    fetchUser({ username }) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'get',
                 url: '/user/detail',
                 params: {
-                    nickname,
+                    username,
                 }
             })
                 .then((response) => {
@@ -124,13 +124,13 @@ export const actions ={
                 });
         });
     },
-    deleteUser({ commit }, { nickname }) {
+    deleteUser({ commit }, { username }) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'delete',
                 url: '/user',
                 params: {
-                    nickname,
+                    username,
                 }
             })
                 .then((response) => {
@@ -163,9 +163,10 @@ export const actions ={
                 .then((response) => {
                     if (200 <= response.status && response.status < 300) {
                         const jwtAuthToken = response.headers['jwt-auth-token'];
-                        const nickname = response.headers['nickname'];
+                        const username = response.headers['username'];
+                        const userpk = response.headers['userpk']
     
-                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, nickname });
+                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, username, userpk });
 
                         resolve(response);
                     } else {
@@ -186,9 +187,9 @@ export const actions ={
                 .then((response) => {
                     if (200 <= response.status && response.status < 300) {
                         const jwtAuthToken = response.headers['jwt-auth-token'];
-                        const nickname = response.headers['nickname'];
+                        const username = response.headers['username'];
     
-                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, nickname });
+                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, username });
 
                         resolve(response);
                     } else {

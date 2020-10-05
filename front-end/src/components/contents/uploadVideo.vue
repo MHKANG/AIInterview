@@ -152,6 +152,7 @@
 import VuePlyr from 'vue-plyr'
 import io from 'socket.io-client'
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
     name : 'uploadVideo',
@@ -190,7 +191,7 @@ export default {
     },
     computed:{
         ...mapGetters([
-            'nickname',
+            'username',
         ])
     },
     mounted(){
@@ -245,8 +246,8 @@ export default {
             let uploadToServer = function(socket, data) {
             socket.emit('uploadFile', {'data' : data})
             };
-            this.upload = {'uid' :this.nickname,'file' : this.upload_file, 'type' : this.upload_file.type };
-            let fileName = this.nickname;
+            this.upload = {'uid' :this.username,'file' : this.upload_file, 'type' : this.upload_file.type };
+            let fileName = this.username;
             let fileType = this.upload_file.type.split('/')[1];
             await uploadToServer(this.socket, this.upload);
             this.socket.on('success', function(data) {
