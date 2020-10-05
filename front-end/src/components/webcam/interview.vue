@@ -38,7 +38,8 @@
                 </div>
                 <div class ="text-center" style ="margin-top:40px">
                     <v-btn fab dark large color ="red darken-4" id ="actionBtn">Record</v-btn>
-                    <a :href=downloadChart download='result.png'><v-btn fab dark large color ="black darken-4" id="resultBtn">Result</v-btn></a>
+                    <a :href=downloadChart download='다운로드.png' id="resultBtn"><v-btn fab dark large color ="black darken-4">Result</v-btn></a>
+                    <v-btn fab dark large color ="orange darken-4" id ="initializeBtn" @click="() => initializeChart()">초기화</v-btn>
                 </div>
             </section>
         </v-main>
@@ -103,6 +104,7 @@ export default {
             cap : null,
             actionBtn: null,
             resultBtn: null,
+            initializeBtn : null,
             streaming : false,
             stream : null,
             width : 0,
@@ -110,6 +112,7 @@ export default {
             FPS : 30,
             fab: false,
             realTimeResult : {'emotion':[], 'value':[]},
+            ctx : null,
             realTimeIndex : [0],
             realTimeArray : [50],
             chart : null,
@@ -135,11 +138,13 @@ export default {
         this.videodata = document.getElementById('inputVideo');
         this.actionBtn = document.getElementById('actionBtn');
         this.resultBtn = document.getElementById('resultBtn');
+        this.initializeBtn = document.getElementById('initializeBtn');
 
         this.onCvLoaded();
         this.cap = new cv.VideoCapture(this.videodata);
 
         var ctx = document.getElementById('myChart').getContext("2d");
+        this.ctx = ctx;
 
         this.downloadChart = document.getElementById('myChart').toDataURL('image/png');
 
@@ -209,18 +214,88 @@ export default {
         onReady(){
 
             let resultBtn = this.resultBtn;
+            let initializeBtn = this.initializeBtn;
 
             this.actionBtn.addEventListener('click', ()=>{
                 if(this.streaming){
                     this.stop();
                     this.actionBtn.textContent ='Record';
                     resultBtn.style.display = 'inline-block';
+                    initializeBtn.style.display = 'inline-block';
+                    
                 }else{
                     this.Record();
                     this.actionBtn.textContent ='Stop'
                     resultBtn.style.display = 'none';
+                    initializeBtn.style.display = 'none';
                 }
             });
+        },
+        initializeChart() {
+            let ctx = this.ctx;
+
+            var gradientFill = ctx.createLinearGradient(500, 0, 100, 0);
+            gradientFill.addColorStop(0, "rgba(128, 182, 244, 1)");
+            gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.6)");
+
+            this.realTimeIndex = [0];
+            this.realTimeArray = [50];
+
+            this.chart = new Chart(ctx, {
+                type: 'line',
+                chartArea: {
+                backgroundColor: 'rgba(0, 0, 0, 255)'
+                },
+                data: {
+                    labels : this.realTimeIndex,
+                    datasets : [
+                        {
+                        label : '실시간 결과',
+                        data : this.realTimeArray,
+                        borderColor: "#80b6f4",
+                        pointBorderColor: "#80b6f4",
+                        pointBackgroundColor: "#80b6f4",
+                        pointHoverBackgroundColor: "#80b6f4",
+                        pointHoverBorderColor: "#80b6f4",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 1,
+                        pointHoverBorderWidth: 1,
+                        pointRadius: 1,
+                        fill: true,
+                        backgroundColor : gradientFill,
+                        borderWidth: 4,}
+                    ]
+                },
+                options: {
+                    responsive : false,
+                    title: {
+                    display: true,
+                    text: '면접 테스트'
+                },
+                },
+                legend : {
+                    display : false,
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            display : false,
+                        },
+                        gridLines: {
+                            display: false,
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            display : false,
+                            },
+                        gridLines: {
+                            display: false,
+                        }
+                    }],
+                    }
+                    });
+            this.chart.update();
         },
         Record(){
             navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -356,5 +431,10 @@ export default {
   #resultBtn {
       margin-left : 50px;
       display : none;
+  }
+
+  #initializeBtn {
+      margin-left : 50px;
+      display : inline-block;
   }
 </style>
