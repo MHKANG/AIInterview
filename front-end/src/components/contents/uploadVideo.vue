@@ -199,7 +199,7 @@ export default {
     },
 
     updated() {
-        this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
+        // this.videosrc = '../../../../face_api/videos/kang/kang1.mp4';
     },
     methods:{
         selectFile(file){
@@ -280,7 +280,7 @@ export default {
                 }).then(res => {
                     console.log(res);
                     alert('영상 업로드가 완료되었습니다!');
-                }).cathc(err => console.log(err));
+                }).catch(err => console.log(err));
             });
         }    
 
