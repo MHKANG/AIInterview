@@ -121,8 +121,8 @@ export default {
     },
     created(){
         // console.log("Created Start")
-        // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
-        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
+        this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+        // this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
         // console.log(this.socket)
         this.socket.on('MESSAGE', (socket) =>{
             // console.log(socket);

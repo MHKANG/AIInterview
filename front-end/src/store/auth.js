@@ -56,7 +56,6 @@ export const actions ={
                         const jwtAuthToken = response.headers['jwt-auth-token'];
                         const username = response.headers['username'];
 
-
                         commit('LOGIN_SUCCESS', {jwtAuthToken, username});
                         
                         resolve(response);
