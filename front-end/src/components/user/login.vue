@@ -267,12 +267,12 @@ export default {
         })
           .then((res) =>{
             console.log(res);
-            console.log("로그인성공");
+            alert("로그인성공");
             this.$router.push("/main");
           })
           .catch((err) =>{
             console.log(err);
-            console.log("로그인 실패");
+            alert("로그인 실패");
           })
       }
     },
