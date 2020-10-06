@@ -174,9 +174,9 @@ export default {
         ])
     },
     created() {
-    //   this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+        this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
-        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
+        // this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
 
         // this.uid = this.$session.get("user").uid;
         // this.uid = "kang";
