@@ -197,7 +197,7 @@ def uploadFile(data):
     with open('./videos/{0}/{1}{2}.{3}'.format(username, username, video_count, video_type), 'wb') as f:
         f.write(video_file);
     user_path = os.path.abspath('./videos/{0}'.format(username))
-    emit("success", {'data' : json.dumps('')})
+    emit("success", {'data':'{0}/{1}{2}.{3}'.format(username, username, video_count, video_type)})
     video_analysis(username, video_type)
 
 cut_size = 44
