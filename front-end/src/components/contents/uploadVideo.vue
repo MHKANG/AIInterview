@@ -16,16 +16,7 @@
                 <v-flex  md7 lg9>
                 </v-flex>
                 <v-flex xs3 md2 lg1>
-                    <v-btn
-                    dense
-                    dark
-                    color="secondary"
-                    small
-                    style="margin-left:5%; margin-top:6%;"
-                    @click="logout"
-                    >
-                    마이페이지
-                    </v-btn>
+                    
                 </v-flex>
                 <v-flex xs3 md2 lg1>
                     <v-btn
@@ -101,7 +92,7 @@
                                 Upload
                                 <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
                             </v-btn>
-                            <v-btn id ="result_btn" @click="uploadFunc">
+                            <v-btn id ="result_btn" @click="goResult">
                                 Go To Result
                                 <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
                             </v-btn>
@@ -176,16 +167,17 @@ export default {
     },
     computed : {
         ...mapGetters([
+            'user_pk',
             'username',
         ])
     },
     created() {
-      this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+    //   this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
-        // this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
 
         // this.uid = this.$session.get("user").uid;
-        this.uid = "kang";
+        // this.uid = "kang";
         this.fab = false;
        
     },
@@ -229,7 +221,8 @@ export default {
         },
         uploadFunc(){
             if(this.upload_file.length == 0){
-                alert("영상 파일을 올려 주세요.")
+                const options = { size: 'sm'}
+                this.$dialogs.alert("영상을 올려주세요.", options)
                 return;
             }else{
                 this.uploadFile()
@@ -252,19 +245,22 @@ export default {
                     // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
                     // console.log(this.videosrc);
             });
+            const tempUsername = this.username;
+            const tempUserPk = this.user_pk;
             this.socket.on('res', function(data) {
                 let result = JSON.parse(data['data'])['point_list'];
                 console.log(result);
                 axios({
                 method: "post",
-                url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
+                url: "http://localhost:8081/api/interviewresult",
                 data: {
-                    username : this.nickname,
+                    user_pk : parseInt(tempUserPk),
+                    username : tempUsername,
                     image_score : parseFloat(result[result.length-1]),
-                    image_score_list : result,
+                    image_score_list : `[${String(result)}]`,
                     voice_score : 0,
-                    silent_interval : '',
-                    graph_image_url : '',
+                    silent_interval : 'None',
+                    graph_image_url : 'None',
                     feedback : 'None',
                     video_length : 0,
                     is_live : false,
@@ -273,11 +269,14 @@ export default {
                 },
                 }).then(res => {
                     console.log(res);
-                    alert('영상 업로드가 완료되었습니다!');
+                    const options = { size: 'sm'}
+                    this.$dialogs.alert("영상을 올려주세요.", options)
                 }).catch(err => console.log(err));
             });
-        }    
-
+        },
+        goResult(){
+        this.$router.push('/resultpage');
+        },
         }
     
 }

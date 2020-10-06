@@ -134,7 +134,6 @@ public class InterviewResult {
 	public InterviewResult(int ir_id, int user_pk, String username, int image_score, String image_score_list,
 			int voice_score, String silent_interval, String graph_image_url, String feedback, int video_length,
 			boolean is_live, String filename, Date test_date) {
-		super();
 		this.ir_id = ir_id;
 		this.user_pk = user_pk;
 		this.username = username;
@@ -149,7 +148,7 @@ public class InterviewResult {
 		this.filename = filename;
 		this.test_date = test_date;
 	}
+
 	
-	public InterviewResult () {}
-	
+	public InterviewResult(){}
 }

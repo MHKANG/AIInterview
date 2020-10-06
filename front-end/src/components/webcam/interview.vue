@@ -5,28 +5,34 @@
         fixed
 
         >   
-        <v-slide-x-transition>
-            <v-img
-                src="@/assets/images/Temp_Logo2.jpg"
-                class="shrink"
-                contain
-                height="50"
-                style="left"
-            />
-        </v-slide-x-transition>
-
-        <v-spacer />
-
-        <v-btn
-            dense
-            dark
-            color="secondary"
-            small
-            style="margin-left:5px;"
-            @click="logout"
-        >
-            로그아웃
-        </v-btn>
+        <v-layout row>
+                <v-flex xs6 md1 lg1>
+                <v-img
+                    src="@/assets/images/ProjectLogo.png"
+                    class="shrink"
+                    contain
+                    height="50"
+                />
+                </v-flex>
+                <v-flex  md7 lg9>
+                </v-flex>
+                <v-flex xs3 md2 lg1>
+                    
+                </v-flex>
+                <v-flex xs3 md2 lg1>
+                    <v-btn
+                        dense
+                        dark
+                        color="secondary"
+                        small
+                        style="margin-left:5%; margin-top:6%;"
+                        @click="logout"
+                    >
+                        로그아웃
+                    </v-btn>
+                </v-flex>
+            
+            </v-layout>
     </v-app-bar>
 
         <v-main>
@@ -212,7 +218,7 @@ export default {
     },
     computed : {
         ...mapGetters([
-            'nickname',
+            'username',
             'user_pk',
         ])},
     methods :{
@@ -416,15 +422,16 @@ export default {
         uploadData(result) {
             axios({
             method: "post",
-            url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
+            url : "http://localhost:8081/api/interviewresult",
+            // url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
             data: {
                 user_pk : parseInt(this.user_pk),
-                username : this.nickname,
-                image_score : result[result.length-1],
-                image_score_list : result,
+                username : this.username,
+                image_score : parseFloat(result[result.length-1]),
+                image_score_list : `[${String(result)}]`,
                 voice_score : 0,
-                silent_interval : '',
-                graph_image_url : '',
+                silent_interval : 'None',
+                graph_image_url : 'None',
                 feedback : 'None',
                 video_length : 0,
                 is_live : true,
