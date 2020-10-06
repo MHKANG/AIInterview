@@ -16,16 +16,7 @@
                 <v-flex  md7 lg9>
                 </v-flex>
                 <v-flex xs3 md2 lg1>
-                    <v-btn
-                    dense
-                    dark
-                    color="secondary"
-                    small
-                    style="margin-left:5%; margin-top:6%;"
-                    @click="logout"
-                    >
-                    마이페이지
-                    </v-btn>
+                    
                 </v-flex>
                 <v-flex xs3 md2 lg1>
                     <v-btn
@@ -230,7 +221,8 @@ export default {
         },
         uploadFunc(){
             if(this.upload_file.length == 0){
-                alert("영상 파일을 올려 주세요.")
+                const options = { size: 'sm'}
+                this.$dialogs.alert("영상을 올려주세요.", options)
                 return;
             }else{
                 this.uploadFile()
@@ -277,7 +269,8 @@ export default {
                 },
                 }).then(res => {
                     console.log(res);
-                    alert('영상 업로드가 완료되었습니다!');
+                    const options = { size: 'sm'}
+                    this.$dialogs.alert("영상을 올려주세요.", options)
                 }).catch(err => console.log(err));
             });
         },
@@ -291,11 +284,7 @@ export default {
 
 <style>
     #mainContainer {
-        /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50; */
+        
         margin-top: 10%;
         margin-left: 3%;
         width: 100%;

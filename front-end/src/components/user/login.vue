@@ -183,7 +183,6 @@
 <script>
 // import PV from "password-validator";
 // import * as EmailValidator from "email-validator";
-// import axios from '@/utils/api';
 
 export default {
   data: () => {
@@ -192,7 +191,7 @@ export default {
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
           title: '팀장 이원오',
-          text: 'Back-end & SQL',
+          text: 'Back-end & AWS',
         },
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
@@ -212,7 +211,7 @@ export default {
         {
           profile: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample92.jpg',
           title: '팀원 정희훈',
-          text: 'Back-end',
+          text: 'Back-end & UCC',
         },
       ],
       rules: {
@@ -225,9 +224,7 @@ export default {
   },
 
   mounted(){
-    if(this.$session.has("user")) {
-      this.$router.push("/main")
-    }
+    
   },
 
   methods: {
@@ -235,44 +232,34 @@ export default {
 
       let exptext = /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+/;
       if(exptext.test(uid)==false){
-        alert("아이디 형식이 올바르지 않습니다.");
+        const options = {title: 'ID Validation', size: 'sm'}
+        this.$dialogs.alert("아이디 형식이 올바르지 않습니다", options)
+        
       }
       else if(password=='')
       {
-        alert("비밀번호를 입력해주세요");
+         const options = {title: 'Empty Password', size: 'sm'}
+        this.$dialogs.alert("비밀번호를 입력해주세요.", options)
       }
       else {
         console.log(uid, password);
 
-        // axios.post("/user/login", {
-        //   uid: this.uid,
-        //   password: this.password
-        // })
-        // .then(response =>{
-        //   console.log(response);
-        //   if (response.data.status) {
-        //     this.$session.set("user", response.data.userinfo);
-        //     console.log(this.$session.has("user"));
-        //     this.$router.push("/main");
-        //   }
-        // })
-        // .catch(err => {
-        //   console.log(err)
-        //   alert("아이디, 비밀번호를 확인해주세요.")
-        // })
-
+        
         this.$store.dispatch("login", {
           uid : this.uid,
           password : this.password
         })
           .then((res) =>{
             console.log(res);
-            alert("로그인성공");
+            const options = {title: 'Login', size: 'sm'}
+            this.$dialogs.alert("로그인 성공", options)
             this.$router.push("/main");
           })
           .catch((err) =>{
             console.log(err);
-            alert("로그인 실패");
+            const options = {title: 'Login', size: 'sm'}
+            this.$dialogs.alert("로그인 실패", options)
+            
           })
       }
     },
