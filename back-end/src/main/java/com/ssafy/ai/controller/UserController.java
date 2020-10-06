@@ -79,6 +79,7 @@ public class UserController {
 			System.out.println(encoded);
 			res.setHeader("jwt-auth-token", token);
 			res.setHeader("username", encoded);
+			res.setHeader("user_pk", Integer.toString(((User)login_res).getUser_pk()));
 			
 			res.setHeader("userpk", Integer.toString(((User)login_res).getUser_pk()));
             result.status = true;
@@ -103,7 +104,7 @@ public class UserController {
 		ResponseEntity response = null;
 		final BasicResponse result = new BasicResponse();
 		System.out.println(u.getNickname());
-		if (uService.SignUp(u) != 0) {
+		if (uService.SignUp(u)) {
 			result.status = true;
 			result.data = "회원 가입 성공";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -120,7 +121,7 @@ public class UserController {
 	public ResponseEntity<String> update(@RequestBody User u) {
 		logger.debug("User / update - 호출");
 
-		if (uService.update(u) != 0) {
+		if (uService.update(u)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
@@ -133,7 +134,7 @@ public class UserController {
 	public ResponseEntity<String> delete(@PathVariable int user_pk) {
 		logger.debug("User / delete - 호출");
 
-		if (uService.delete(user_pk) != 0) {
+		if (uService.delete(user_pk)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
@@ -144,7 +145,7 @@ public class UserController {
 	public Object extendJWT(HttpServletRequest req, HttpServletResponse res)throws UnsupportedEncodingException{
 		ResponseEntity<BasicResponse> response = null;
 		final BasicResponse result = new BasicResponse();
-		User user = uService.selectByNickname(req.getHeader("nickname"));
+		User user = uService.selectByUsername(req.getHeader("username"));
 		String token = jwtService.create(user);
 		String encoded = URLEncoder.encode(user.getNickname(), "UTF-8");
 		res.setHeader("jwt-auth-token", token);
@@ -162,8 +163,9 @@ public class UserController {
     public ResponseEntity<Boolean> checkEmail(@RequestParam String email) throws Exception {
        logger.debug("User / checkEmail - 호출");
        boolean is_existed = false;
-       String result = uService.checkEmail(email);
-       if (result != null) {
+       // 이메일이 있으면 true 리턴
+       boolean result = uService.checkEmail(email);
+       if (result) {
           is_existed = true;
        }
        return new ResponseEntity<Boolean>(is_existed, HttpStatus.OK);

@@ -2,19 +2,55 @@ package com.ssafy.ai.model.dto;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="InterviewResult")
 public class InterviewResult {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
 	private int ir_id;
+	
+	@Column
 	private int user_pk;
+	
+	@Column
 	private String username;
+	@Column
 	private int image_score;
+	
+	@Column
 	private String image_score_list;
+	
+	@Column
 	private int voice_score;
+	
+	@Column
 	private String silent_interval;
+	
+	@Column
 	private String graph_image_url;
+	
+	@Column
 	private String feedback;
+	
+	@Column
 	private int video_length;
+	
+	@Column
 	private boolean is_live;
+	
+	@Column
 	private String filename;
+	
+	@Column
 	private Date test_date;
 	public int getIr_id() {
 		return ir_id;
@@ -113,5 +149,7 @@ public class InterviewResult {
 		this.filename = filename;
 		this.test_date = test_date;
 	}
+	
+	public InterviewResult () {}
 	
 }

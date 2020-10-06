@@ -2,19 +2,15 @@ package com.ssafy.ai.model.dao;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.ssafy.ai.model.dto.InterviewResult;
 
-public interface InterviewResultDao {
+public interface InterviewResultDao extends JpaRepository<InterviewResult, Integer> {
 
-	public List<InterviewResult> selectAll();
-
-	public InterviewResult select(int ir_id);
-
-	public int insert(InterviewResult ir);
-
-	public int delete(int ir_id);
-
-	public int update(InterviewResult ir);
+	@Query(value="SELECT * FROM interview_result WHERE ir_id=:ir_id", nativeQuery = true)
+	InterviewResult getInterviewId(int ir_id);
 	
-	public List<InterviewResult> selectByUsername(String username);
+	List<InterviewResult> getInterviewResultByUsername(String username);
 }

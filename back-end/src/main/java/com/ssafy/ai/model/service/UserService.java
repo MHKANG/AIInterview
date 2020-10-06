@@ -12,15 +12,15 @@ public interface UserService {
 
 	public User select(int user_pk);
 
-	public int SignUp(User u);
+	public boolean SignUp(User u);
 
-	public int delete(int user_pk);
+	public boolean delete(int user_pk);
 
-	public int update(User u);
+	public boolean update(User u);
 	
 	public User selectByUid(String uid);
 	
-	public User selectByNickname(String nickname);
+	public User selectByUsername(String username);
 	
-	 public String checkEmail(String uid);
+	 public boolean checkEmail(String uid);
 }
