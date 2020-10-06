@@ -7519,11 +7519,6 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-recordrtc@^5.6.1:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/recordrtc/-/recordrtc-5.6.1.tgz#da876700fa149bbb230df7591a020e2c43de01c8"
-  integrity sha512-UU7Fd9IIuz60TPq4GgL1qtgo2mzEZWzPxEraNe32eo4/ndjKmuj715HB7W1k63G09teM1dXJYubPEmLkQ/lq5Q==
-
 recursive-readdir@^2.1.0:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/recursive-readdir/-/recursive-readdir-2.2.2.tgz#9946fb3274e1628de6e36b2f6714953b4845094f"
@@ -8132,11 +8127,6 @@ socket.io@^2.3.0:
     socket.io-adapter "~1.1.0"
     socket.io-client "2.3.0"
     socket.io-parser "~3.4.0"
-
-socketio-file-upload@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/socketio-file-upload/-/socketio-file-upload-0.7.2.tgz#1205a4d4c0ba9eb8df544442a920a3fcaaa29ff4"
-  integrity sha512-T6LG2We7GoGlBQed988s3ACoe2ilmILt57clnFO0rc4QOQ2u1gq00XfMPdHZrb0zyRUtd98G2BhDi2DGiPoNvQ==
 
 sockjs-client@1.4.0:
   version "1.4.0"
@@ -9252,13 +9242,6 @@ vue-plyr@^6.0.4:
     plyr "^3.5.6"
     vue "^2.6.10"
 
-vue-record-webcam@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/vue-record-webcam/-/vue-record-webcam-1.1.3.tgz#ebe10bdd8328fee6eb7487dc74c2a3d6e135f27b"
-  integrity sha512-mADFgsxIPmmTjBvi6UdV/f48lXzcTYvAaB4ZSokVVyv7wwmZu2uKUAG9zG3wAzJBPDwn/HUeqJWCiZtcZZqd8w==
-  dependencies:
-    vue "^2.5.2"
-
 vue-router@^3.4.3:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.3.tgz#fa93768616ee338aa174f160ac965167fa572ffa"
@@ -9304,7 +9287,7 @@ vue-toc@0.0.1:
   dependencies:
     vue "^2.6.10"
 
-vue@^2.5.2, vue@^2.6.10, vue@^2.6.11:
+vue@^2.6.10, vue@^2.6.11:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==

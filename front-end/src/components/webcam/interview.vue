@@ -88,7 +88,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 <script>
-// const io = require('socket.io-client')
+
 import io from 'socket.io-client'
 import cv from 'opencv.js'
 import Chart from 'chart.js'
@@ -123,19 +123,19 @@ export default {
         }
     },
     created(){
-        // console.log("Created Start")
+        
         this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         // this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
-        // console.log(this.socket)
+        
         this.socket.on('MESSAGE', (socket) =>{
-            // console.log(socket);
+            
             this.message = socket;
             console.log(this.message);
         });
-        // console.log("End")
+        
         this.width = 320
         this.height = 240
-        // console.log(this.message)
+        
     },
     mounted(){
         this.videodata = document.getElementById('inputVideo');
@@ -309,7 +309,7 @@ export default {
             navigator.mediaDevices.getUserMedia({ video: true, audio: false })
             .then(_stream => {
                 this.stream = _stream;
-                // console.log('stream', this.stream);
+                
                 this.videodata.srcObject = this.stream;
                 this.videodata.play();
                 this.streaming = true;
@@ -342,7 +342,6 @@ export default {
 
             const begin = Date.now();
             this.cap.read(this.src);
-            // console.log(this.src);
             cv.cvtColor(this.src, this.dst, cv.COLOR_RGBA2GRAY);
             
             await uploadToServer(this.socket, this.src.data);

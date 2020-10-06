@@ -113,9 +113,6 @@
 </template>
 
 <script>
-// var storage = window.localStorage;
-
-// import Constants from "../../Constants";
 import axios from "axios";
 export default {
   data() {
