@@ -28,6 +28,9 @@ public class InterviewResultDaoImpl implements InterviewResultDao{
 	}
 	@Override
 	public List<InterviewResult> selectByUsername(String username) {
+		List<InterviewResult> temp = template.selectList(ns +"selectByUsername", username);
+		System.out.println("temp :" +temp.toString());
+		System.out.println(username);
 		return template.selectList(ns +"selectByUsername", username);
 	}
 

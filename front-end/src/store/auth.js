@@ -30,7 +30,7 @@ export const getters = {
     encodedUsername: (state) =>{
         return encodeURI(state.username);
     },
-    nickname: (state) =>{
+    username: (state) =>{
         return state.username;
     },
     jwtAuthToken: (state)=>{

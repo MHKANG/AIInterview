@@ -156,7 +156,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: "http://j3a308.p.ssafy.io:8080/api/user/signup",
+          url: "http://localhost:8081/api/user/signup",
           data: {
             uid: this.email,
             password: this.password,
@@ -189,7 +189,7 @@ export default {
       var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
       axios({
         method: "GET",
-        url: "http://j3a308.p.ssafy.io:8080/api/user/emailCheck?email=" + this.email,
+        url: "http://localhost:8081/api/user/emailCheck?email=" + this.email,
       })
         .then((data) => {
           let msg = "이미 가입된 이메일 입니다.";

@@ -100,7 +100,6 @@ export default {
             interviewResult : null,
             ctx : null,
             chart : null,
-            username : null,
             fab : false,
             width : 480,
             height : 360,
@@ -108,19 +107,19 @@ export default {
     },
     computed : {
          ...mapGetters([
-            'nickname',
+            'username',
         ])
     },
     created() {
         axios({
             method : "get",
-            url : `http://j3a308.p.ssafy.io:8000/api/interviewresult/select/nickname/${this.nickname}`,
+            url : `http://localhost:8081/api/interviewresult/select/username/${this.username}`,
         }).then(
             (res) => {
+                console.log(res);
                 this.data = res.data
                 }
         ).catch(err => console.log(err));
-        this.username = this.nickname;
     },
     mounted() {
         var ctx = document.getElementById('myChart').getContext("2d");

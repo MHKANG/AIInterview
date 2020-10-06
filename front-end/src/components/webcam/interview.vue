@@ -124,8 +124,8 @@ export default {
     },
     created(){
         // console.log("Created Start")
-        this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
-        // this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
+        // this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
         // console.log(this.socket)
         this.socket.on('MESSAGE', (socket) =>{
             // console.log(socket);
@@ -212,7 +212,7 @@ export default {
     },
     computed : {
         ...mapGetters([
-            'nickname',
+            'username',
         ])},
     methods :{
         onCvLoaded(){
@@ -416,15 +416,16 @@ export default {
         uploadData(result) {
             axios({
             method: "post",
-            url : "http://localhost:3306/api/interviewresult",
+            url : "http://localhost:8081/api/interviewresult",
             // url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
             data: {
-                username : this.nickname,
-                image_score : result[result.length-1],
-                image_score_list : result,
+                user_pk : 0,
+                username : this.username,
+                image_score : parseInt(result[result.length-1]),
+                image_score_list : JSON.stringify(result),
                 voice_score : 0,
-                silent_interval : '',
-                graph_image_url : '',
+                silent_interval : 'None',
+                graph_image_url : 'None',
                 feedback : 'None',
                 video_length : 0,
                 is_live : true,

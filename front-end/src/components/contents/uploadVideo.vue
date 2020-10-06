@@ -176,13 +176,13 @@ export default {
     },
     computed : {
         ...mapGetters([
-            'nickname',
+            'username',
         ])
     },
     created() {
-      this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+    //   this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
-        // this.socket = io('ws://127.0.0.1:2346', {transports : ['websocket']})
+        this.socket = io('ws://127.0.0.1:8080', {transports : ['websocket']})
 
         // this.uid = this.$session.get("user").uid;
         this.uid = "kang";
@@ -241,8 +241,8 @@ export default {
             let uploadToServer = function(socket, data) {
             socket.emit('uploadFile', {'data' : data})
             };
-            this.upload = {'uid' :this.nickname,'file' : this.upload_file, 'type' : this.upload_file.type };
-            let fileName = this.nickname;
+            this.upload = {'uid' :this.username,'file' : this.upload_file, 'type' : this.upload_file.type };
+            let fileName = this.username;
             let fileType = this.upload_file.type.split('/')[1];
             await uploadToServer(this.socket, this.upload);
             this.socket.on('success', function(data) {
@@ -257,9 +257,9 @@ export default {
                 console.log(result);
                 axios({
                 method: "post",
-                url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
+                url: "http://localhost:8081/api/interviewresult",
                 data: {
-                    username : this.nickname,
+                    username : this.username,
                     image_score : parseFloat(result[result.length-1]),
                     image_score_list : result,
                     voice_score : 0,
