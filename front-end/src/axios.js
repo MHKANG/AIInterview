@@ -3,7 +3,7 @@ import store from './store'
 
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8081/api/',
+    baseURL: 'http://localhost:8080/api/',
     // baseURL: 'http://j3a308.p.ssafy.io:8080/api'
 });
 
