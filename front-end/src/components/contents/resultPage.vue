@@ -100,7 +100,6 @@ export default {
             interviewResult : null,
             ctx : null,
             chart : null,
-            username : null,
             fab : false,
             width : 480,
             height : 360,
@@ -108,84 +107,89 @@ export default {
     },
     computed : {
          ...mapGetters([
-            'nickname',
+            'username',
         ])
     },
     created() {
         axios({
             method : "get",
-            url : `http://j3a308.p.ssafy.io:8000/api/interviewresult/select/nickname/${this.nickname}`,
+            url : `http://j3a308.p.ssafy.io:8080/api/interviewresult/select/username/${this.username}`,
         }).then(
             (res) => {
-                this.data = res.data
-                }
-        ).catch(err => console.log(err));
-        this.username = this.nickname;
-    },
-    mounted() {
-        var ctx = document.getElementById('myChart').getContext("2d");
-        this.ctx = ctx;
+                this.data = res.data;
+                var ctx = document.getElementById('myChart').getContext("2d");
+                this.ctx = ctx;
 
-        var gradientFill = ctx.createLinearGradient(500, 0, 100, 0);
-        gradientFill.addColorStop(0, "rgba(128, 182, 244, 1)");
-        gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.6)");
+                var gradientFill = ctx.createLinearGradient(500, 0, 100, 0);
+                gradientFill.addColorStop(0, "rgba(128, 182, 244, 1)");
+                gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.6)");
 
-        this.chart = new Chart(ctx, {
-        type: 'line',
-        chartArea: {
-        backgroundColor: 'rgba(0, 0, 0, 255)'
-        },
-        data: {
-            labels : this.data.map((val) => new Range(val.length)),
-            datasets : this.data.map((val, index) => {
-                const color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-                return {
-                    label : `${index+1}번째`,
-                    data : val,
-                    borderColor: color,
-                    pointBorderColor: color,
-                    pointBackgroundColor: color,
-                    pointHoverBackgroundColor: color,
-                    pointHoverBorderColor: color,
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 1,
-                    pointHoverBorderWidth: 1,
-                    pointRadius: 1,
-                    fill: false,
-                    borderWidth: 4
-                }
-            })
+                const data = this.data;
+
+                this.chart = new Chart(ctx, {
+                type: 'line',
+                chartArea: {
+                backgroundColor: 'rgba(0, 0, 0, 255)'
                 },
-                options: {
-                    responsive : false,
-                    title: {
-                    display: true,
-                    text: '테스트 결과'
-                },
-                },
-                legend : {
-                    display : false,
-                },
-                scales: {
-                    xAxes: [{
-                        ticks: {
+                data: {
+                    labels : data.map((val) => new Range(val.image_score_list.slice(1,val.image_score_list.length-1).split(',').map(a => parseInt(a)).length)),
+                    datasets : data.map((val, index) => {
+                        const color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+                        const datas = (val.image_score_list.slice(1,val.image_score_list.length-1).split(',')).map(a => parseInt(a));
+                        console.log(datas);
+                        return {
+                            label : `${index+1}번째`,
+                            data : datas,
+                            borderColor: color,
+                            pointBorderColor: color,
+                            pointBackgroundColor: color,
+                            pointHoverBackgroundColor: color,
+                            pointHoverBorderColor: color,
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 1,
+                            pointHoverBorderWidth: 1,
+                            pointRadius: 1,
+                            fill: false,
+                            borderWidth: 4
+                        }
+                    })
+                        },
+                        options: {
+                            responsive : false,
+                            title: {
+                            display: true,
+                            text: '테스트 결과'
+                        },
+                        },
+                        legend : {
                             display : false,
                         },
-                        gridLines: {
-                            display: false,
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    display : false,
+                                },
+                                gridLines: {
+                                    display: false,
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    display : false,
+                                    },
+                                gridLines: {
+                                    display: false,
+                                }
+                            }],
                         }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            display : false,
-                            },
-                        gridLines: {
-                            display: false,
-                        }
-                    }],
+                    });
+                this.chart.update();
                 }
-            });
-        this.chart.update();
+        ).catch(err => console.log(err));
+
+    },
+    mounted() {
+
     },
     methods : {
         logout(){

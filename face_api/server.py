@@ -197,7 +197,7 @@ def uploadFile(data):
     with open('./videos/{0}/{1}{2}.{3}'.format(username, username, video_count, video_type), 'wb') as f:
         f.write(video_file);
     user_path = os.path.abspath('./videos/{0}'.format(username))
-    emit("success", {'data' : json.dumps('')})
+    emit("success", {'data':'{0}/{1}{2}.{3}'.format(username, username, video_count, video_type)})
     video_analysis(username, video_type)
 
 cut_size = 44
@@ -217,4 +217,4 @@ net.eval()
 if __name__ == '__main__':
     app.debug = True
     print("server start!")
-    socketio.run(app, host='127.0.0.1', port=8000)
+    socketio.run(app, host='0.0.0.0', port=8000)

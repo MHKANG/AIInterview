@@ -5,28 +5,34 @@
         fixed
 
         >   
-        <v-slide-x-transition>
-            <v-img
-                src="@/assets/images/Temp_Logo2.jpg"
-                class="shrink"
-                contain
-                height="50"
-                style="left"
-            />
-        </v-slide-x-transition>
-
-        <v-spacer />
-
-        <v-btn
-            dense
-            dark
-            color="secondary"
-            small
-            style="margin-left:5px;"
-            @click="logout"
-        >
-            로그아웃
-        </v-btn>
+        <v-layout row>
+                <v-flex xs6 md1 lg1>
+                <v-img
+                    src="@/assets/images/ProjectLogo.png"
+                    class="shrink"
+                    contain
+                    height="50"
+                />
+                </v-flex>
+                <v-flex  md7 lg9>
+                </v-flex>
+                <v-flex xs3 md2 lg1>
+                    
+                </v-flex>
+                <v-flex xs3 md2 lg1>
+                    <v-btn
+                        dense
+                        dark
+                        color="secondary"
+                        small
+                        style="margin-left:5%; margin-top:6%;"
+                        @click="logout"
+                    >
+                        로그아웃
+                    </v-btn>
+                </v-flex>
+            
+            </v-layout>
     </v-app-bar>
 
         <v-main>
@@ -88,7 +94,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 <script>
-// const io = require('socket.io-client')
+
 import io from 'socket.io-client'
 import cv from 'opencv.js'
 import Chart from 'chart.js'
@@ -123,19 +129,19 @@ export default {
         }
     },
     created(){
-        // console.log("Created Start")
+        
         this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
         // this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
-        // console.log(this.socket)
+        
         this.socket.on('MESSAGE', (socket) =>{
-            // console.log(socket);
+            
             this.message = socket;
             console.log(this.message);
         });
-        // console.log("End")
+        
         this.width = 320
         this.height = 240
-        // console.log(this.message)
+        
     },
     mounted(){
         this.videodata = document.getElementById('inputVideo');
@@ -212,7 +218,7 @@ export default {
     },
     computed : {
         ...mapGetters([
-            'nickname',
+            'username',
             'user_pk',
         ])},
     methods :{
@@ -309,7 +315,7 @@ export default {
             navigator.mediaDevices.getUserMedia({ video: true, audio: false })
             .then(_stream => {
                 this.stream = _stream;
-                // console.log('stream', this.stream);
+                
                 this.videodata.srcObject = this.stream;
                 this.videodata.play();
                 this.streaming = true;
@@ -342,7 +348,6 @@ export default {
 
             const begin = Date.now();
             this.cap.read(this.src);
-            // console.log(this.src);
             cv.cvtColor(this.src, this.dst, cv.COLOR_RGBA2GRAY);
             
             await uploadToServer(this.socket, this.src.data);
@@ -417,15 +422,16 @@ export default {
         uploadData(result) {
             axios({
             method: "post",
-            url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
+            url : "http://j3a308.p.ssafy.io:8080/api/interviewresult",
+            // url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
             data: {
                 user_pk : parseInt(this.user_pk),
-                username : this.nickname,
-                image_score : result[result.length-1],
-                image_score_list : result,
+                username : this.username,
+                image_score : parseFloat(result[result.length-1]),
+                image_score_list : `[${String(result)}]`,
                 voice_score : 0,
-                silent_interval : '',
-                graph_image_url : '',
+                silent_interval : 'None',
+                graph_image_url : 'None',
                 feedback : 'None',
                 video_length : 0,
                 is_live : true,

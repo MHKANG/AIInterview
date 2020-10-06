@@ -68,7 +68,7 @@
               <base-text>
                 모의면접 결과가 궁금하세요?
               </base-text>
-              <base-btn class="mt-4">
+              <base-btn class="mt-4" @click="goResult">
                 View Report!
               </base-btn>
             </v-col>
@@ -129,6 +129,9 @@
       },
       goUpload(){
         this.$router.push('/uploadVideo');
+      },
+      goResult(){
+        this.$router.push('/resultpage');
       }
     },
 
