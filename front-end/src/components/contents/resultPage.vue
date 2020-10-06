@@ -113,7 +113,7 @@ export default {
     created() {
         axios({
             method : "get",
-            url : `http://localhost:8081/api/interviewresult/select/username/${this.username}`,
+            url : `http://j3a308.p.ssafy.io:8080/api/interviewresult/select/username/${this.username}`,
         }).then(
             (res) => {
                 this.data = res.data;
