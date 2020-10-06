@@ -422,7 +422,7 @@ export default {
         uploadData(result) {
             axios({
             method: "post",
-            url : "http://localhost:8081/api/interviewresult",
+            url : "http://j3a308.p.ssafy.io:8080/api/interviewresult",
             // url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
             data: {
                 user_pk : parseInt(this.user_pk),

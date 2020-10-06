@@ -49,7 +49,9 @@
                             crossorigin
                             playsinline
                             poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"
-                            :src="videosrc"
+                            src=""
+                            style="display:none;"
+                            id="uploadedVideo"
                         >
                             
                         </video>
@@ -236,14 +238,17 @@ export default {
             };
             this.upload = {'uid' :this.username,'file' : this.upload_file, 'type' : this.upload_file.type };
             let fileName = this.username;
-            let fileType = this.upload_file.type.split('/')[1];
-            await uploadToServer(this.socket, this.upload);
+            // let fileType = this.upload_file.type.split('/')[1];
+            uploadToServer(this.socket, this.upload);
+            let videosrc = this.videosrc;
             this.socket.on('success', function(data) {
-                this.videoSrc = `../../../../face_api/videos/${fileName}/${fileName}1.${fileType}`;
-                console.log(data);
-                    // let path = JSON.parse(data['data'])['path'];
-                    // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
-                    // console.log(this.videosrc);
+                let path = data['data'];
+                videosrc = `AI/s03p23a308/face_api/videos/${path}`;
+                const video = document.getElementById('uploadedVideo');
+                video.setAttribute('src', videosrc);
+                video.style.display = 'inline-block';
+                // video.load();
+                // video.play();
             });
             const tempUsername = this.username;
             const tempUserPk = this.user_pk;
@@ -252,7 +257,7 @@ export default {
                 console.log(result);
                 axios({
                 method: "post",
-                url: "http://localhost:8081/api/interviewresult",
+                url: "http://j3a308.p.ssafy.io:8080/api/interviewresult",
                 data: {
                     user_pk : parseInt(tempUserPk),
                     username : tempUsername,
