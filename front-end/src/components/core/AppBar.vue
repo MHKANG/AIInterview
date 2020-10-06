@@ -17,7 +17,7 @@
 
     <v-spacer />
 
-<!--    {{nickname}}님-->
+   {{nickname}}님
     <v-btn
         dense
         dark
@@ -32,7 +32,8 @@
 </template>
 
 <script>
-// import axios from "@/utils/api";
+
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'CoreAppBar',
@@ -42,14 +43,11 @@
       isScrolling: false,
     }),
 
-    // created() {
-    //   axios.post('/user', {
-    //     nickname: this.nickname,
-    //   })
-    //       .then(response => {
-    //         console.log(response);
-    //       })
-    // },
+    computed:{
+      ...mapGetters([
+            'username',
+        ])
+    },
 
     methods: {
       onScroll () {
@@ -59,9 +57,9 @@
       },
       logout(){
         this.$store.dispatch('logout');
-        // this.$session.destroy();
 
-        alert("로그아웃 됬습니다.")
+        const options = {size: 'sm'}
+        this.$dialogs.alert("로그아웃 됐습니다..", options)
         this.$router.push("/");
       },
     },

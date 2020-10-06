@@ -132,27 +132,33 @@ export default {
   methods: {
     signIn() {
       if (this.email == "") {
-        alert("이메일을 입력해주세요");
+        const options = {size: 'sm'}
+        this.$dialogs.alert("이메일 형식 아이디를 입력해주세요.", options)
         return;
       }
       if (this.password == "") {
-        alert("비밀번호를 입력해주세요");
+        const options = {size: 'sm'}
+        this.$dialogs.alert("비밀번호를 입력해주세요.", options)
         return;
       }
       if (this.nickname == "") {
-        alert("닉네임을 입력해주세요");
+        const options = {size: 'sm'}
+        this.$dialogs.alert("별명을 입력해주세요.", options)
         return;
       }
       if (this.username == "") {
-        alert("이름을 입력해주세요");
+        const options = {size: 'sm'}
+        this.$dialogs.alert("이름을 입력해주세요.", options)
         return;
       }
       if (this.gender == "성별") {
-        alert("성별을 입력해주세요");
+        const options = {size: 'sm'}
+        this.$dialogs.alert("성별을 입력해주세요.", options)
         return;
       }
       if (this.age == "") {
-        alert("나이를 입력해주세요");
+        const options = {size: 'sm'}
+        this.$dialogs.alert("나이를 입력해주세요.", options)
       } else {
         axios({
           method: "post",
@@ -175,7 +181,8 @@ export default {
             if (data.data.status) {
               msg = "회원 가입 완료";
             }
-            alert(msg);
+            const options = {title: 'Sign Up', size: 'sm'}
+            this.$dialogs.alert(msg, options)
           })
           .catch((error) => {
             console.log(error);
@@ -195,17 +202,20 @@ export default {
           let msg = "이미 가입된 이메일 입니다.";
           console.log(data);
           if (this.email == "") {
-            alert("이메일을 입력해 주세요.");
+            const options = {size: 'sm'}
+            this.$dialogs.alert("값을 입력 해주세요.", options)
             return;
           }
           if (this.email.match(regExp) == null) {
-            alert("이메일 형식이 맞지 않습니다.");
+            const options = {size: 'sm'}
+            this.$dialogs.alert("이메일 형식 아이디를 입력해주세요.", options)
             return;
           }
           if (data.data == false) {
             msg = "사용 가능한 이메일 입니다.";
           }
-          alert(msg);
+          const options = {size: 'sm'}
+            this.$dialogs.alert(msg, options)
         })
         .catch((error) => {
           console.log(error);
