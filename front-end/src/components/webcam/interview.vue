@@ -213,6 +213,7 @@ export default {
     computed : {
         ...mapGetters([
             'nickname',
+            'user_pk',
         ])},
     methods :{
         onCvLoaded(){
@@ -418,6 +419,7 @@ export default {
             method: "post",
             url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
             data: {
+                user_pk : parseInt(this.user_pk),
                 username : this.nickname,
                 image_score : result[result.length-1],
                 image_score_list : result,

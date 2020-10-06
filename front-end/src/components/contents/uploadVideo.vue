@@ -189,11 +189,6 @@ export default {
         this.fab = false;
        
     },
-    computed:{
-        ...mapGetters([
-            'username',
-        ])
-    },
     mounted(){
         
     },
