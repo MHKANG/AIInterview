@@ -2,16 +2,46 @@ package com.ssafy.ai.model.dto;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+
 public class User {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
 	private int user_pk;
+	
+	@Column
 	private String uid;
+	
+	@Column
 	private String password;
+	
+	@Column
 	private String nickname;
+	
+	@Column
 	private String username;
+	
+	@Column
 	private boolean is_admin;
+	
+	@Column
 	private boolean is_activated;
+	
+	@Column
 	private Date auth_date;
+	
+	@Column
 	private String gender;
+	
+	@Column
 	private int age;
 	
 	public int getUser_pk() {

@@ -2,19 +2,55 @@ package com.ssafy.ai.model.dto;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="InterviewResult")
 public class InterviewResult {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
 	private int ir_id;
+	
+	@Column
 	private int user_pk;
+	
+	@Column
 	private String username;
+	@Column
 	private int image_score;
+	
+	@Column
 	private String image_score_list;
+	
+	@Column
 	private int voice_score;
+	
+	@Column
 	private String silent_interval;
+	
+	@Column
 	private String graph_image_url;
+	
+	@Column
 	private String feedback;
+	
+	@Column
 	private int video_length;
+	
+	@Column
 	private boolean is_live;
+	
+	@Column
 	private String filename;
+	
+	@Column
 	private Date test_date;
 	public int getIr_id() {
 		return ir_id;
@@ -115,14 +151,4 @@ public class InterviewResult {
 
 	
 	public InterviewResult(){}
-
-	@Override
-	public String toString() {
-		return "InterviewResult [feedback=" + feedback + ", filename=" + filename + ", graph_image_url="
-				+ graph_image_url + ", image_score=" + image_score + ", image_score_list=" + image_score_list
-				+ ", ir_id=" + ir_id + ", is_live=" + is_live + ", silent_interval=" + silent_interval + ", test_date="
-				+ test_date + ", user_pk=" + user_pk + ", username=" + username + ", video_length=" + video_length
-				+ ", voice_score=" + voice_score + "]";
-	}
-	
 }

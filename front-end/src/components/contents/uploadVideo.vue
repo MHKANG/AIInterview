@@ -101,7 +101,7 @@
                                 Upload
                                 <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
                             </v-btn>
-                            <v-btn id ="result_btn" @click="uploadFunc">
+                            <v-btn id ="result_btn" @click="goResult">
                                 Go To Result
                                 <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
                             </v-btn>
@@ -176,16 +176,17 @@ export default {
     },
     computed : {
         ...mapGetters([
+            'user_pk',
             'username',
         ])
     },
     created() {
     //   this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
-        this.socket = io('ws://127.0.0.1:8080', {transports : ['websocket']})
+        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
 
         // this.uid = this.$session.get("user").uid;
-        this.uid = "kang";
+        // this.uid = "kang";
         this.fab = false;
        
     },
@@ -252,6 +253,8 @@ export default {
                     // this.videosrc = `${path}\\` + `${fileName}1.${fileType}`;
                     // console.log(this.videosrc);
             });
+            const tempUsername = this.username;
+            const tempUserPk = this.user_pk;
             this.socket.on('res', function(data) {
                 let result = JSON.parse(data['data'])['point_list'];
                 console.log(result);
@@ -259,12 +262,13 @@ export default {
                 method: "post",
                 url: "http://localhost:8081/api/interviewresult",
                 data: {
-                    username : this.username,
+                    user_pk : parseInt(tempUserPk),
+                    username : tempUsername,
                     image_score : parseFloat(result[result.length-1]),
-                    image_score_list : result,
+                    image_score_list : `[${String(result)}]`,
                     voice_score : 0,
-                    silent_interval : '',
-                    graph_image_url : '',
+                    silent_interval : 'None',
+                    graph_image_url : 'None',
                     feedback : 'None',
                     video_length : 0,
                     is_live : false,
@@ -276,8 +280,10 @@ export default {
                     alert('영상 업로드가 완료되었습니다!');
                 }).catch(err => console.log(err));
             });
-        }    
-
+        },
+        goResult(){
+        this.$router.push('/resultpage');
+        },
         }
     
 }

@@ -34,7 +34,7 @@ public class InterviewResultController {
 
 	@Autowired
 	private InterviewResultService irService;
-
+	
 	@ApiOperation(value = "모든 InterviewResult의 정보를 반환한다.", response = List.class)
 	@GetMapping
 	public ResponseEntity<List<InterviewResult>> selectAll() throws Exception {
@@ -48,21 +48,21 @@ public class InterviewResultController {
 	public ResponseEntity<InterviewResult> select(@PathVariable int ir_id) throws Exception {
 		logger.debug("InterviewResult / select - 호출");
 
-		return new ResponseEntity<InterviewResult>(irService.select(ir_id), HttpStatus.OK);
+		return new ResponseEntity<InterviewResult>(irService.selectById(ir_id), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "유저 이름으로 저장된 인터뷰 결과 값 가져오기", response = InterviewResult.class)
 	@GetMapping("select/username/{username}")
 	public ResponseEntity<List<InterviewResult>> getVideoUsername(@PathVariable String username) {
 		
-		return new ResponseEntity<List<InterviewResult>>(irService.selectByUsername(username), HttpStatus.OK);
+		return new ResponseEntity<List<InterviewResult>>(irService.selectByUserName(username), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "InterviewResult의 정보를 삽입한다.", response = String.class)
 	@PostMapping
 	public ResponseEntity<String> insert(@RequestBody InterviewResult ir) {
 		logger.debug("InterviewResult / insert - 호출");
-		if (irService.insert(ir) != 0) {
+		if (irService.insert(ir)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
@@ -73,7 +73,7 @@ public class InterviewResultController {
 	public ResponseEntity<String> update(@RequestBody InterviewResult ir) {
 		logger.debug("InterviewResult / update - 호출");
 
-		if (irService.update(ir) != 0) {
+		if (irService.upadate(ir)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
@@ -84,7 +84,7 @@ public class InterviewResultController {
 	public ResponseEntity<String> delete(@PathVariable int ir_id) {
 		logger.debug("InterviewResult / delete - 호출");
 
-		if (irService.delete(ir_id) != 0) {
+		if (irService.delete(ir_id)) {
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);

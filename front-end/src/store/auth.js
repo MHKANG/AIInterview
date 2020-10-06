@@ -9,20 +9,24 @@ Vue.use(Vuex);
 export const state ={
     username: '',
     jwtAuthToken: '',
+    user_pk: '',
 };
 
 export const mutations ={
-    LOGIN_SUCCESS(state, { jwtAuthToken, username }){
+    LOGIN_SUCCESS(state, { jwtAuthToken, username, user_pk }){
         state.jwtAuthToken = jwtAuthToken;
         state.username = decodeURI(username);
+        state.user_pk = user_pk;
     },
-    TOKEN_UPDATE_SUCCESS(state, {jwtAuthToken, username}){
+    TOKEN_UPDATE_SUCCESS(state, {jwtAuthToken, username, user_pk}){
         state.jwtAuthToken = jwtAuthToken;
         state.username = decodeURI(username);
+        state.user_pk = user_pk;
     },
     LOGOUT(state){
         state.username = null;
         state.jwtAuthToken = null;
+        state.user_pk = null;
     }
 };
 
@@ -36,6 +40,9 @@ export const getters = {
     jwtAuthToken: (state)=>{
         return state.jwtAuthToken;
     },
+    user_pk: (state) =>{
+        return state.user_pk;
+    }
 };
 
 export const actions ={
@@ -55,8 +62,9 @@ export const actions ={
                     if(200 <= response.status && response.status < 300){
                         const jwtAuthToken = response.headers['jwt-auth-token'];
                         const username = response.headers['username'];
+                        const user_pk = response.headers['user_pk'];
 
-                        commit('LOGIN_SUCCESS', {jwtAuthToken, username});
+                        commit('LOGIN_SUCCESS', {jwtAuthToken, username, user_pk});
                         
                         resolve(response);
                     }else{
@@ -163,9 +171,9 @@ export const actions ={
                     if (200 <= response.status && response.status < 300) {
                         const jwtAuthToken = response.headers['jwt-auth-token'];
                         const username = response.headers['username'];
-                        const userpk = response.headers['userpk']
+                        const user_pk = response.headers['user_pk']
     
-                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, username, userpk });
+                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, username, user_pk });
 
                         resolve(response);
                     } else {
@@ -187,8 +195,9 @@ export const actions ={
                     if (200 <= response.status && response.status < 300) {
                         const jwtAuthToken = response.headers['jwt-auth-token'];
                         const username = response.headers['username'];
+                        const user_pk = response.headers['user_pk']
     
-                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, username });
+                        commit('TOKEN_UPDATE_SUCCESS', { jwtAuthToken, username, user_pk });
 
                         resolve(response);
                     } else {

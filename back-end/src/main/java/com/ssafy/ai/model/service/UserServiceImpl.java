@@ -1,8 +1,8 @@
 package com.ssafy.ai.model.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public List<User> selectAll() {
-		return uDao.selectAll();
+		return uDao.findAll();
 	}
 
 	@Override
@@ -30,41 +30,72 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public int SignUp(User u) {
-		String encrypted = bcrpytimpl.encrypt(u.getPassword());
-		u.setPassword(encrypted);
+	public boolean SignUp(User u) {
+		boolean result = false;
+		 
+		Optional<User> temp = uDao.selectByUid(u.getUid());
 		
-		return uDao.insert(u);
+		// 중복 아이디가 없는 경우에만 회원 가입
+		if(!temp.isPresent()) {
+			String encrypted = bcrpytimpl.encrypt(u.getPassword());
+			u.setPassword(encrypted);
+			
+			uDao.save(u);
+			result = true;
+		}
+		 
+		 return result;
 	}
 
 	@Override
-	public int delete(int user_pk) {
-		return uDao.delete(user_pk);
+	public boolean delete(int user_pk) {
+		
+		boolean result = false;
+		
+		Optional<User> tUser = uDao.findById(user_pk);
+		if(tUser.isPresent()) {
+			uDao.delete(tUser.get());
+			result = true;
+		}
+		return result;
 	}
 
 	@Override
-	public int update(User u) {
-		return uDao.update(u);
+	public boolean update(User u) {
+		boolean result = false;
+		
+		Optional<User> tUser = uDao.findById(u.getUser_pk());
+		if(tUser.isPresent()) {
+			uDao.save(tUser.get());
+			result = true;
+		}
+		return result;
 	}
 
 	@Override
 	public User selectByUid(String uid) {
-		return uDao.selectByUid(uid);
+		
+		Optional<User> temp = uDao.selectByUid(uid); 
+		
+		User result = temp.get();
+		
+		return result;
 	}
 	
 	@Override
-	public User selectByNickname(String nickname) {
-		return uDao.selectByNickname(nickname);
+	public User selectByUsername(String username) {
+		return uDao.selectByUsername(username);
 	}
 	
 	@Override
 	public Object login(User u) {
 		Object res = null;
-		User check = uDao.selectByUid(u.getUid());
-		System.out.println(check.toString());
-		if(check != null) {
-			if(bcrpytimpl.isMatch(u.getPassword(), check.getPassword())){
-				res = check;
+		Optional<User> check = uDao.selectByUid(u.getUid());
+//		System.out.println(check.toString());
+		if(check.isPresent()) {
+			User temp = check.get();
+			if(bcrpytimpl.isMatch(u.getPassword(), temp.getPassword())){
+				res = temp;
 			}else {
 				res ="password";
 			}
@@ -76,8 +107,15 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-    public String checkEmail(String uid) {
-        return uDao.checkEmail(uid);
+    public boolean checkEmail(String uid) {
+		
+		boolean result = false;
+		Optional<User>oUser = uDao.selectByUid(uid);
+		
+		if(oUser.isPresent()) {
+			result = true;
+		}
+        return result;
     }
 
 }

@@ -213,6 +213,7 @@ export default {
     computed : {
         ...mapGetters([
             'username',
+            'user_pk',
         ])},
     methods :{
         onCvLoaded(){
@@ -419,10 +420,10 @@ export default {
             url : "http://localhost:8081/api/interviewresult",
             // url: "http://j3a308.p.ssafy.io:8000/api/interviewresult",
             data: {
-                user_pk : 0,
+                user_pk : parseInt(this.user_pk),
                 username : this.username,
-                image_score : parseInt(result[result.length-1]),
-                image_score_list : JSON.stringify(result),
+                image_score : parseFloat(result[result.length-1]),
+                image_score_list : `[${String(result)}]`,
                 voice_score : 0,
                 silent_interval : 'None',
                 graph_image_url : 'None',

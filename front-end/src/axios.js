@@ -12,6 +12,7 @@ instance.interceptors.request.use(
         if(store.getters.nickname){
             config.headers['jwt-auth-token'] = store.getters.jwtAuthToken;
             config.headers['nickname'] = store.getters.encodedNickname;
+            config.headers['user_pk'] = store.getters.user_pk;
         }
 
         return config;
