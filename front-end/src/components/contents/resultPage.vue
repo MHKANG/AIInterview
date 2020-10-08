@@ -124,7 +124,21 @@ export default {
                 gradientFill.addColorStop(0, "rgba(128, 182, 244, 1)");
                 gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.6)");
 
-                const data = this.data;
+                const data = this.data.map(val => val.image_score_list.slice(1,val.image_score_list.length-1).split(',').map(a => parseFloat(a)));
+
+                let maxLength = 0;
+
+                for (var i=0; i < data.length; i++) {
+                    if (maxLength < data[i].length) {
+                        maxLength = data[i].length
+                    }
+                }
+
+                let labels = new Array();
+
+                for (var j=0; j < maxLength; j++) {
+                    labels.push(j);
+                }
 
                 this.chart = new Chart(ctx, {
                 type: 'line',
@@ -132,14 +146,12 @@ export default {
                 backgroundColor: 'rgba(0, 0, 0, 255)'
                 },
                 data: {
-                    labels : data.map((val) => new Range(val.image_score_list.slice(1,val.image_score_list.length-1).split(',').map(a => parseInt(a)).length)),
+                    labels : labels,
                     datasets : data.map((val, index) => {
                         const color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-                        const datas = (val.image_score_list.slice(1,val.image_score_list.length-1).split(',')).map(a => parseInt(a));
-                        console.log(datas);
                         return {
                             label : `${index+1}번째`,
-                            data : datas,
+                            data : val,
                             borderColor: color,
                             pointBorderColor: color,
                             pointBackgroundColor: color,
@@ -155,34 +167,26 @@ export default {
                     })
                         },
                         options: {
-                            responsive : false,
-                            title: {
-                            display: true,
-                            text: '테스트 결과'
-                        },
-                        },
-                        legend : {
-                            display : false,
-                        },
-                        scales: {
-                            xAxes: [{
-                                ticks: {
-                                    display : false,
-                                },
-                                gridLines: {
-                                    display: false,
-                                }
+                    responsive : false,
+                    title: {
+                    display: true,
+                    text: '테스트 결과',
+                    scales: {
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 10
+                             },
                             }],
-                            yAxes: [{
-                                ticks: {
-                                    display : false,
-                                    },
-                                gridLines: {
-                                    display: false,
-                                }
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero : true,
+                            stepSize: 40
+                              },
                             }],
                         }
-                    });
+                    },
+                },
+            });
                 this.chart.update();
                 }
         ).catch(err => console.log(err));
