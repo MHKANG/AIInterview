@@ -17,7 +17,7 @@
 
     <v-spacer />
 
-   {{nickname}}님
+   {{username}}님
     <v-btn
         dense
         dark

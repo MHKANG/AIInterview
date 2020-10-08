@@ -174,9 +174,9 @@ export default {
         ])
     },
     created() {
-    //   this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
+        this.socket = io('http://j3a308.p.ssafy.io:8000', {transports : ['websocket']})
 
-        this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
+        // this.socket = io('ws://127.0.0.1:8000', {transports : ['websocket']})
 
         // this.uid = this.$session.get("user").uid;
         // this.uid = "kang";
@@ -252,6 +252,7 @@ export default {
             });
             const tempUsername = this.username;
             const tempUserPk = this.user_pk;
+            const talert = this.$dialogs;
             this.socket.on('res', function(data) {
                 let result = JSON.parse(data['data'])['point_list'];
                 console.log(result);
@@ -275,7 +276,7 @@ export default {
                 }).then(res => {
                     console.log(res);
                     const options = { size: 'sm'}
-                    this.$dialogs.alert("영상을 올려주세요.", options)
+                    talert.alert("영상이 업로드 됐습니다.", options)
                 }).catch(err => console.log(err));
             });
         },
