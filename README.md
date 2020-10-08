@@ -31,10 +31,7 @@
 # Project Setup
 ## Requirements
 > 프로젝트 실행을 위한 변수 설정
-#### ***/frontend/.env***
-``` properties
-VUE_APP_API_URL=
-VUE_APP_KAKAO_API_KEY=
+
 ```
 
 #### ***/backend/src/main/resources/application.properties***
