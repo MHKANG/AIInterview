@@ -94,7 +94,7 @@
                                 Upload
                                 <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
                             </v-btn>
-                            <v-btn id ="result_btn" @click="goResult">
+                            <v-btn id ="result_btn" v-show="showResult" @click="goResult">
                                 Go To Result
                                 <v-icon right dark color="primary">mdi-cloud-upload</v-icon>
                             </v-btn>
@@ -165,6 +165,7 @@ export default {
             progress: 0,
             message: "",
             fileInfos: [],
+            showResult: false,
         }
     },
     computed : {
@@ -252,7 +253,11 @@ export default {
             });
             const tempUsername = this.username;
             const tempUserPk = this.user_pk;
+<<<<<<< HEAD
             const talert = this.$dialogs;
+=======
+            const showResult = this.showResultFunc;
+>>>>>>> bd3f77f2db7cf53159018cfd4be8b6c3f080343a
             this.socket.on('res', function(data) {
                 let result = JSON.parse(data['data'])['point_list'];
                 console.log(result);
@@ -275,6 +280,7 @@ export default {
                 },
                 }).then(res => {
                     console.log(res);
+                    showResult();
                     const options = { size: 'sm'}
                     talert.alert("영상이 업로드 됐습니다.", options)
                 }).catch(err => console.log(err));
@@ -282,6 +288,9 @@ export default {
         },
         goResult(){
         this.$router.push('/resultpage');
+        },
+        showResultFunc(){
+            this.showResult = true;
         },
         }
     
